@@ -1,5 +1,6 @@
 import { BiChevronRight } from "react-icons/bi"
 import { Link } from "react-router-dom"
+import { socialLinks } from "../../constants/links"
 
 export const Footer = () => {
     return (
@@ -58,7 +59,20 @@ export const Footer = () => {
                 </p>
 
                 <div className="flex">
-
+                    {
+                        socialLinks.map((link) => (
+                            <a
+                                key={link.href}
+                                href={link.href}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-slate-300 border border-gray-800 w-full h-full py-3.5 flex items-center
+                                justify-center transition-all hover:bg-white hover:text-gray-950"
+                            >
+                                {link.icon}
+                            </a>
+                        ))
+                    }
                 </div>
             </div>
         </footer>

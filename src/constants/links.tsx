@@ -18,7 +18,7 @@ export const navbarLinks = [
     }
 ];
 
-export const socialLink = [
+export const socialLinks = [
     {
         id: 1,
         title: 'Facebook',
