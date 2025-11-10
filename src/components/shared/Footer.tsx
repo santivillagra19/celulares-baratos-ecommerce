@@ -1,0 +1,66 @@
+import { BiChevronRight } from "react-icons/bi"
+import { Link } from "react-router-dom"
+
+export const Footer = () => {
+    return (
+        <footer className="py-16 bg-gray-950 px-12 flex justify-between gap-10 text-slate-200 text-sm flex-wrap
+        md: flex-nowrap"
+        >
+            <Link to='' className={`text-2xl font-bold tracking-tighter transition-all text-white flex-1`}>
+                Celulares Baratos
+            </Link>
+
+            <div className="flex flex-col gap-4 flex-1">
+                <p className="font-semibold uppercase tracking-tighter">
+                    Suscríbete
+                </p>
+                <p className="text-sm font-medium">
+                    Recibe promociones exclusivas
+                </p>
+
+                <div className="border border-gray-800 flex items-center gap-2 px-3 py-2 rounded-full">
+                    <input
+                        type="email"
+                        placeholder="Correo electrónico"
+                        className="pl-2 bg-gray-950 text-slate-200 w-full focus: outline-none"
+                    />
+
+                    <button className="text-slate-200">
+                        <BiChevronRight size={20}></BiChevronRight>
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-4 flex-1">
+                <p className="font semi-bold uppercase tracking-tighter">
+                    Políticas
+                </p>
+
+                <nav className="flex flex-col gap-2 text-xs font-medium">
+                    <Link to='#'>Productos</Link>
+                    <Link to='/celulares'>Celulares</Link>
+                    <Link to='#' className="text-slate-300 hover:text-white">
+                        Políticas de privacidad
+                    </Link>
+                    <Link to='#' className="text-slate-300 hover:text-white">
+                        Términos de uso
+                    </Link>
+                </nav>
+            </div>
+
+            <div className="flex flex-col gap-4 flex-1">
+                <p className="font semi-bold uppercase tracking-tighter">
+                    Síguenos
+                </p>
+
+                <p className="text-xs leading-6">
+                    No te pierdas las novedades que Celulares Baratos tiene para ti.
+                </p>
+
+                <div className="flex">
+
+                </div>
+            </div>
+        </footer>
+    )
+}
