@@ -1,8 +1,9 @@
+import type { Product } from "../../interfaces"
 import { CardProduct } from "../products/CardProduct"
 
 interface Props {
     title: string,
-    products: any[]
+    products: Product[]
 }
 
 export const ProductGrid = ({ title, products }: Props) => {
