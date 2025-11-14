@@ -25,7 +25,7 @@ export const AboutPage = () => {
                 </p>
 
                 <h2 className="text-3xl font-semibold tracking-tight mt-8 mb-4">
-                    No esperes más, y compra tu celular en CelularesBaratos
+                    No esperes más, y compra tu celular en CelularesBaratos.
                 </h2>
 
                 <p>
