@@ -9,6 +9,7 @@ export const HomePage = () => {
 
     const { products, isLoading } = useProducts();
 
+
     const preparedRecentProducts = prepareProducts(recentCelulares)
     const popularProducts = prepareProducts(popularCelulares)
 
