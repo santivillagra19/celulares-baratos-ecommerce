@@ -18,6 +18,7 @@ export const CellPhonesPage = () => {
         data: products = [],
         isLoading,
         totalProducts
+
     } = useFilteredProducts({
         page,
         brands: selectedBrands,
