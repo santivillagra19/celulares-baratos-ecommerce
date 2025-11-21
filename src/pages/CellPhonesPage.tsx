@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { CardProduct } from "../components/products/CardProduct"
 import { ContainerFilter } from "../components/products/ContainerFilter"
 import { prepareProducts } from "../helpers"
@@ -9,6 +9,10 @@ export const CellPhonesPage = () => {
 
     const [page, setPage] = useState(1);
     const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+
+    useEffect(() => {
+        setPage(1);
+    }, [selectedBrands]);
 
     const {
         data: products = [],
