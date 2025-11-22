@@ -7,7 +7,6 @@ export const getProducts = async () => {
         .order('created_at', { ascending: false });
 
     if (error) {
-        console.log(error.message);
         throw new Error(error.message);
     }
 
@@ -38,7 +37,6 @@ export const getFilteredProducts = async ({
     const { data, error, count } = await query;
 
     if (error) {
-        console.log(error.message);
         throw new Error(error.message);
     }
 
@@ -53,7 +51,6 @@ export const getRecentProducts = async () => {
         .limit(4);
 
     if (error) {
-        console.log(error.message)
         throw new Error(error.message)
     }
 
@@ -67,11 +64,9 @@ export const getRandomProducts = async () => {
         .limit(20);
 
     if (error) {
-        console.log(error.message)
         throw new Error(error.message)
     }
 
-    // Seleccionar 4 productos al azar
     const randomProducts = products
         .sort(() => 0.5 - Math.random())
         .slice(0, 4);
