@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { RootLayout } from "../layouts/RootLayout";
-import { HomePage, AboutPage, CellPhonesPage } from "../pages";
+import { HomePage, AboutPage, CellPhonesPage, CellPhonePage } from "../pages";
 
 export const router = createBrowserRouter([
     {
@@ -14,6 +14,10 @@ export const router = createBrowserRouter([
             {
                 path: 'celulares',
                 element: <CellPhonesPage />
+            },
+            {
+                path: 'celulares/:slug',
+                element: < CellPhonePage />
             },
             {
                 path: 'nosotros',
