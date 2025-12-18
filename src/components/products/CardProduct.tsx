@@ -26,13 +26,13 @@ export const CardProduct = ({
     const [activeColor, setActiveColor] = useState<{
         name: string,
         color: string,
-    }>(colors[0]);
+    }>(colors[0] || null);
 
     const selectedVariant = variants.find(
-        variant => variant.color === activeColor.color
+        variant => variant.color === activeColor?.color
     );
 
-    const stock = selectedVariant.stock || 0;
+    const stock = selectedVariant?.stock ?? 0;
 
     return <div className="flex flex-col gap-6 relative">
         <Link to={`/celulares/${slug}`} className="flex relative group overflow-hidden">
@@ -66,9 +66,12 @@ export const CardProduct = ({
                     colors.map((color) => (
                         <span
                             key={color.color}
+                            onClick={() => setActiveColor(color)}
                             className=
                             {
-                                `grid place-items-center w-5 h-5 rounded-full cursor-pointer`
+                                `grid place-items-center w-5 h-5 rounded-full cursor-pointer
+                                activeColor?.color === color.color ? 'ring-1 ring-offset-2 ring-slate-800' : ''
+                                `
                             }
                         >
                             <span className="w-3.5 h-3.5 rounded-full "
@@ -85,7 +88,9 @@ export const CardProduct = ({
         <div className="absolute top-2 left-2">
             {
                 stock === 0 && (
-                    <span>Agotado</span>
+                    <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">
+                        Agotado
+                    </div>
                 )
             }
         </div>

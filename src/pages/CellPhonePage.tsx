@@ -1,5 +1,6 @@
 import { Separator } from "../components/shared/Separator";
 import { formatPrice } from "../helpers";
+import { LuMinus, LuPlus } from "react-icons/lu";
 
 export const CellPhonePage = () => {
     return <div>
