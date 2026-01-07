@@ -78,7 +78,8 @@ export const getProductBySlug = async (slug: string) => {
     const { data, error } = await supabase
         .from('products')
         .select('*, variants(* )')
-        .eq('slug', slug);
+        .eq('slug', slug)
+        .single();
 
     if (error) {
         throw new Error(error.message)

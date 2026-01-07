@@ -4,14 +4,56 @@ import { LuMinus, LuPlus } from "react-icons/lu";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { BsChatLeftText } from "react-icons/bs";
 import { CustomSelect } from "./CustomSelect";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useMemo, useState, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { GridImages } from "../components/one-product/GridImages";
 import { ProductDescription } from "../components/one-product/ProductDescription";
+import { useProduct } from "../hooks/products/useProduct";
+import type { VariantProduct } from "../interfaces";
+
+interface Acc {
+    [key: string]: {
+        name: string,
+        storages: string[]
+    }
+}
 
 export const CellPhonePage = () => {
-    const [selectedStorage, setSelectedStorage] = useState("256GB");
-    const storageOptions = ["256GB", "512GB", "1TB"];
+    // const [selectedStorage, setSelectedStorage] = useState("256GB");
+    const { slug } = useParams<{ slug: string }>();
+    const { product, isLoading, isError } = useProduct(slug || '');
+
+    const [selectedColor, setSelectedColor] = useState<string | null>(
+        null
+    );
+
+    const [selectedStorage, setSelectedStorage] = useState<string | null>(
+        null
+    );
+
+    const [selectedVariant, setSelectedVariant] = useState<VariantProduct | null>(
+        null
+    );
+
+    const colors = useMemo(() => {
+        return product?.variants?.reduce((acc: Acc, variant: VariantProduct) => {
+            const { color, color_name, storage } = variant
+            if (!acc[color]) {
+                acc[color] = {
+                    name: color_name,
+                    storages: []
+                };
+            }
+
+            if (!acc[color].storages.includes(storage)) {
+                acc[color].storages.push(storage);
+            }
+
+            return acc;
+        }, {} as Acc) || {};
+    }, [product?.variants]);
+
+
     return <div>
 
         <div className="h-fit flex flex-col md:flex-row gap-16 mt-8">
