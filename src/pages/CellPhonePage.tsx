@@ -3,6 +3,7 @@ import { formatPrice } from "../helpers";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { BsChatLeftText } from "react-icons/bs";
+import { LuLoader } from "react-icons/lu"
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { GridImages } from "../components/one-product/GridImages";
@@ -83,6 +84,14 @@ export const CellPhonePage = () => {
     //  Obtener el stock
     const isOutStock = selectedVariant?.stock === 0;
 
+    if (isLoading) {
+        return (
+            <div className="flex justify-center items-center h-[80vh]">
+                <LuLoader className="animate-spin text-slate-800" size={40} />
+            </div>
+        )
+    }
+
     if (!product || isError) {
         return (
             <div className="flex justify-center items-center h-[80vh]">
@@ -142,7 +151,7 @@ export const CellPhonePage = () => {
                                 >
                                     <span
                                         className="w-[26px] h-[26px] rounded-full"
-                                        style={{ backgroundColor: 'blue' }}
+                                        style={{ backgroundColor: color }}
                                     />
                                 </button>
                             ))
