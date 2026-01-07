@@ -10,17 +10,15 @@ export const formatPrice = (price: number) => {
     }).format(price);
 }
 
-//funcion para preparar los productos
 export const prepareProducts = (products: Product[]) => {
     return products.map(product => {
-        // Agrupar las variantes por color
+
         const colors = product.variants.reduce((acc: Color[], variant: VariantProduct) => {
             const existingColor = acc.find(item => item.color === variant.color)
 
             if (existingColor) {
-                // Si ya existe el color, compramos los precios
                 existingColor.price = Math.min(existingColor.price, variant.price)
-            } // Mantenemos el precio mínimo
+            }
 
             else {
                 acc.push({

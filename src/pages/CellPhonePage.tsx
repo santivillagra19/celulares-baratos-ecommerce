@@ -1,12 +1,23 @@
 import { Separator } from "../components/shared/Separator";
 import { formatPrice } from "../helpers";
 import { LuMinus, LuPlus } from "react-icons/lu";
+import { CiDeliveryTruck } from "react-icons/ci";
+import { BsChatLeftText } from "react-icons/bs";
+import { CustomSelect } from "./CustomSelect";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { GridImages } from "../components/one-product/GridImages";
+import { ProductDescription } from "../components/one-product/ProductDescription";
 
 export const CellPhonePage = () => {
+    const [selectedStorage, setSelectedStorage] = useState("256GB");
+    const storageOptions = ["256GB", "512GB", "1TB"];
     return <div>
+
         <div className="h-fit flex flex-col md:flex-row gap-16 mt-8">
             <div>
                 Galeria de imagenes
+                <GridImages images={[]} />
             </div>
 
             <div className="flex-1 space-y-5">
@@ -57,14 +68,16 @@ export const CellPhonePage = () => {
                     </p>
 
                     <div className="flex gap-3">
-                        <select className="border border-gray-300 rounded-lg px-3 py-1">
-                            <option value="">256GB</option>
-                        </select>
+                        <CustomSelect
+                            options={storageOptions}
+                            selected={selectedStorage}
+                            onChange={setSelectedStorage}
+                        />
                     </div>
                 </div>
 
                 {
-                    true ? (
+                    false ? (
                         <button disabled className="bg-[#f3f3f3] uppercase font-semibold tracking-widest text-xs 
                         py-4 rounded-full transition-all duration-300 hover:bg-[#e2e2e2] w-full">
                             Agotado
@@ -91,14 +104,35 @@ export const CellPhonePage = () => {
 
                             <div className="flex flex-col gap-3">
                                 <button className="bg-[#f3f3f3] uppercase font-semibold tracking-widest text-xs 
-                        py-4 rounded-full transition-all duration-300 hover:bg-[#e2e2e2]">
+                        py-4 rounded-full transition-all duration-300 hover:bg-[#e2e2e2] cursor-pointer w-full">
                                     Agregar al carrito
+                                </button>
+                                <button className="bg-black text-white uppercase font-semibold tracking-widest text-xs 
+                                rounded-full py-4 cursor-pointer w-full hover:bg-slate-900 transition-all duration-300">
+                                    Comprar ahora
                                 </button>
                             </div>
                         </>
                     )
                 }
+
+                <div className="grid grid-cols-2 pt-2 gap-4 mt-6">
+                    <div className="flex flex-col gap-2 p-2 flex-1 items-center justify-center">
+                        <CiDeliveryTruck size={35} />
+                        <p className="text-xs font-semibold text-center">Envío gratis a todo el país</p>
+                    </div>
+
+                    <Link to="#" className="flex flex-col gap-2 p-2 items-center justify-center">
+                        <BsChatLeftText size={30} />
+                        <div className="text-center">
+                            <p className="text-xs font-bold">¿Necesitas ayuda?</p>
+                            <p className="text-[10px] text-slate-500 cursor-pointer hover:underline">Contáctanos aquí</p>
+                        </div>
+                    </Link>
+                </div>
             </div>
         </div>
+
+        <ProductDescription />
     </div>
 };

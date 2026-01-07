@@ -49,4 +49,4 @@ export const HomePage = () => {
             <Brands />
         </div>
     )
-}
+} 
