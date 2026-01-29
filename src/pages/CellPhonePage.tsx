@@ -4,82 +4,51 @@ import { LuMinus, LuPlus } from "react-icons/lu";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { BsChatLeftText } from "react-icons/bs";
 import { LuLoader } from "react-icons/lu"
-import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { GridImages } from "../components/one-product/GridImages";
 import { ProductDescription } from "../components/one-product/ProductDescription";
 import { useProduct } from "../hooks/products/useProduct";
-import type { VariantProduct } from "../interfaces";
+import { Tag } from "../components/shared/Tag";
+import { useProductSelection } from "../hooks/products/useProductSelection";
+import { useCartStore } from "../store/cart.store";
+import { useGlobalStore } from "../store/global.store";
+import { useState } from "react";
 
-interface Acc {
-    [key: string]: {
-        name: string,
-        storages: string[]
-    }
-}
 
 export const CellPhonePage = () => {
-    // const [selectedStorage, setSelectedStorage] = useState("256GB");
     const { slug } = useParams<{ slug: string }>();
     const { product, isLoading, isError } = useProduct(slug || '');
 
-    const [selectedColor, setSelectedColor] = useState<string | null>(
-        null
-    );
+    const {
+        selectedColor,
+        selectedStorage,
+        selectedVariant,
+        colors,
+        availableColors,
+        handleColorChange,
+        handleStorageChange
+    } = useProductSelection(product);
 
-    const [selectedStorage, setSelectedStorage] = useState<string | null>(
-        null
-    );
+    const [count, setCount] = useState(1);
 
-    const [selectedVariant, setSelectedVariant] = useState<VariantProduct | null>(
-        null
-    );
+    const addToCart = useCartStore(state => state.addToCart);
+    const openSheet = useGlobalStore(state => state.openSheet);
 
-    const colors = useMemo(() => {
-        return product?.variants?.reduce((acc: Acc, variant: VariantProduct) => {
-            const { color, color_name, storage } = variant
-            if (!acc[color]) {
-                acc[color] = {
-                    name: color_name,
-                    storages: []
-                };
-            }
-
-            if (!acc[color].storages.includes(storage)) {
-                acc[color].storages.push(storage);
-            }
-
-            return acc;
-        }, {} as Acc) || {};
-    }, [product?.variants]);
-
-
-    //  Obtener el primer color predeterminado si no hay ninguno seleccionado
-    const availableColors = Object.keys(colors)
-    useEffect(() => {
-        if (!selectedColor && availableColors.length > 0) {
-            setSelectedColor(availableColors[0])
+    const increment = () => {
+        if (selectedVariant && count < selectedVariant.stock) {
+            setCount(c => c + 1)
         }
-    }, [availableColors, selectedColor]);
+    };
 
-    //  Actualizar el almacenamiento seleccionado cuando cambia el color seleccionado
-    useEffect(() => {
-        if (selectedColor && colors[selectedColor] && !selectedStorage) {
-            setSelectedStorage(colors[selectedColor].storages[0])
-        }
-    }, [selectedColor, colors, selectedStorage]);
+    const decrement = () => setCount(c => Math.max(1, c - 1));
 
-    //  Obtener la variante seleccionada
-    useEffect(() => {
-        if (selectedColor && selectedStorage) {
-            const variant = product?.variants.find(
-                (variant) =>
-                    variant.color === selectedColor &&
-                    variant.storage === selectedStorage
-            );
-            setSelectedVariant(variant as VariantProduct)
+    const handleAddToCart = () => {
+        if (selectedVariant && product) {
+            addToCart(product, selectedVariant, count);
+            setCount(1);
+            openSheet('cart');
         }
-    }, [selectedColor, selectedStorage, product?.variants])
+    };
 
     //  Obtener el stock
     const isOutStock = selectedVariant?.stock === 0;
@@ -118,7 +87,7 @@ export const CellPhonePage = () => {
                     </span>
 
                     <div className="relative">
-                        {isOutStock && <span>Agotado</span>}
+                        {isOutStock && <Tag contentTag='agotado' />}
                     </div>
                 </div>
 
@@ -140,22 +109,16 @@ export const CellPhonePage = () => {
                         Color: {selectedColor && colors[selectedColor].name}
                     </p>
                     <div className="flex gap-3">
-                        {
-                            availableColors.map((color) => (
-                                <button
-                                    key={color}
-                                    className={`w-8 h-8 rounded-full flex justify-center items-center ${selectedColor === color
-                                        ? 'border border-slate-800'
-                                        : ''
-                                        }`}
-                                >
-                                    <span
-                                        className="w-[26px] h-[26px] rounded-full"
-                                        style={{ backgroundColor: color }}
-                                    />
-                                </button>
-                            ))
-                        }
+                        {availableColors.map((color) => (
+                            <button
+                                key={color}
+                                onClick={() => handleColorChange(color)}
+                                className={`w-8 h-8 rounded-full flex justify-center items-center ${selectedColor === color ? 'border border-slate-800' : ''
+                                    }`}
+                            >
+                                <span className="w-[26px] h-[26px] rounded-full" style={{ backgroundColor: color }} />
+                            </button>
+                        ))}
                     </div>
                 </div>
 
@@ -169,7 +132,7 @@ export const CellPhonePage = () => {
                             <select
                                 className="border border-gray-300 rounded-lg px-3 py-1"
                                 value={selectedStorage || ''}
-                                onChange={e => setSelectedStorage(e.target.value)}
+                                onChange={e => handleStorageChange(e.target.value)}
                             >
                                 {
                                     colors[selectedColor].storages.map(storage => (
@@ -177,11 +140,6 @@ export const CellPhonePage = () => {
                                     ))
                                 }
                             </select>
-
-                            {/* <CustomSelect
-                                    options=''
-                                    onChange={setSelectedStorage}
-                                /> */}
                         </div>
                     )}
                 </div>
@@ -198,15 +156,19 @@ export const CellPhonePage = () => {
                                 <p className="text-sm font-medium">
                                     Cantidad:
                                 </p>
-
                                 <div className="flex gap-8 px-5 border border-slate-200 w-fit rounded-full">
-                                    <button className="">
+                                    <button
+                                        onClick={decrement}
+                                        disabled={count === 1}
+                                    >
                                         <LuMinus size={15} />
                                     </button>
                                     <span className="text-slate-500 text-sm">
-                                        1
+                                        {count}
                                     </span>
-                                    <button>
+                                    <button
+                                        onClick={increment}
+                                    >
                                         <LuPlus size={15} />
                                     </button>
                                 </div>

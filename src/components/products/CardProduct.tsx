@@ -3,6 +3,7 @@ import { FiPlus } from "react-icons/fi"
 import { Link } from "react-router-dom"
 import type { VariantProduct } from "../../interfaces"
 import { formatPrice } from "../../helpers"
+import { Tag } from "../shared/Tag"
 
 interface Props {
     img: string,
@@ -87,11 +88,7 @@ export const CardProduct = ({
 
         <div className="absolute top-2 left-2">
             {
-                stock === 0 && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider">
-                        Agotado
-                    </div>
-                )
+                stock === 0 && <Tag contentTag='agotado' />
             }
         </div>
     </div>
