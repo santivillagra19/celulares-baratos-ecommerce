@@ -1,3 +1,4 @@
+import type { Product } from "../interfaces";
 import { supabase } from "../supabase/client"
 
 export const getProducts = async () => {
@@ -86,4 +87,16 @@ export const getProductBySlug = async (slug: string) => {
     }
 
     return data;
+}
+
+export const searchProducts = async (searchTerm: string): Promise<Product[]> => {
+    const { data, error } = await supabase
+        .from('products')
+        .select('*,variants(*)').ilike('name', `%${searchTerm}%`); // Buscar productos cuyo nombre contenga el termino de búsqueda
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data as Product[] || [];
 }
