@@ -7,16 +7,19 @@ type SheetContent = 'cart' | 'search' | null;
 export interface GlobalState {
     isSheetOpen: boolean;
     sheetContent: SheetContent;
+    activeNavMobile: boolean;
 
     //  TODO: navbar mobile
     openSheet: (content: SheetContent) => void;
     closeSheet: () => void;
+    setActiveNavMobile: (active: boolean) => void;
 
 }
 
 const storeApi: StateCreator<GlobalState> = set => ({
     isSheetOpen: false,
     sheetContent: null,
+    activeNavMobile: false,
 
     openSheet: (content) => {
         set({ isSheetOpen: true, sheetContent: content })
@@ -24,6 +27,9 @@ const storeApi: StateCreator<GlobalState> = set => ({
     closeSheet: () => {
         set({ isSheetOpen: false })
     },
+    setActiveNavMobile: active => {
+        set({ activeNavMobile: active })
+    }
 });
 
 export const useGlobalStore = create<GlobalState>()(devtools(storeApi));

@@ -9,3 +9,19 @@
 .btn-paginated {
     @apply border border-slate-700 rounded-md font-semibold text-xs py-1 px-3 hover:bg-slate-700 hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:border-slate-800 disabled:hover:bg-white disabled:hover:text-slate-700;
 }
+
+/* Tu animación personalizada */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Creas una clase para usarla */
+.slide-in-animation {
+    animation: slideIn 0.4s ease-out forwards;
+}

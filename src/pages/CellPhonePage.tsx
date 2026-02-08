@@ -44,7 +44,17 @@ export const CellPhonePage = () => {
 
     const handleAddToCart = () => {
         if (selectedVariant && product) {
-            addToCart(product, selectedVariant, count);
+            addToCart({
+                variantId: selectedVariant.id,
+                productId: product.id,
+                name: product.name,
+                image: product.images[0],
+                color: selectedColor ? colors[selectedColor].name : null,
+                storage: selectedStorage,
+                price: selectedVariant.price,
+                quantity: count,
+            });
+
             setCount(1);
             openSheet('cart');
         }
@@ -175,7 +185,9 @@ export const CellPhonePage = () => {
                             </div>
 
                             <div className="flex flex-col gap-3">
-                                <button className="bg-[#f3f3f3] uppercase font-semibold tracking-widest text-xs 
+                                <button
+                                    onClick={handleAddToCart}
+                                    className="bg-[#f3f3f3] uppercase font-semibold tracking-widest text-xs 
                         py-4 rounded-full transition-all duration-300 hover:bg-[#e2e2e2] cursor-pointer w-full">
                                     Agregar al carrito
                                 </button>

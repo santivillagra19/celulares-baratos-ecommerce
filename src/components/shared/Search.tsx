@@ -38,36 +38,39 @@ export const Search = () => {
                     <IoMdClose size={22} />
                 </button>
             </form>
-            <button onClick={closeSheet}>
+            <button className="cursor-pointer" onClick={closeSheet}>
                 <IoMdClose size={25} className="text-black" />
             </button>
         </div>
 
-        //  Resultados de busqueda
         <div className="p-5">
             {
                 searchResults.length > 0 ? (
                     <ul>
-                        <li className="py-2 group">
-                            <button className="flex items-center gap-3">
-                                <img src="" alt="" className="h-20 w-20 object-contain p-3" />
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-sm font-semibold group-hover:underline">
-                                        Producto 1
-                                    </p>
+                        {
+                            searchResults.map(product => (
+                                <li className="py-2 group" key={product.id}>
+                                    <button className="flex items-center gap-3">
+                                        <img src={product.images[0]} alt={product.name} className="h-20 w-20 object-contain p-3" />
+                                        <div className="flex flex-col gap-1">
+                                            <p className="text-sm font-semibold group-hover:underline">
+                                                {product.name}
+                                            </p>
 
-                                    <p className="text-[13px] text-gray-600 ">
-                                        256Gb / Azul
-                                    </p>
+                                            <p className="text-[13px] text-gray-600 ">
+                                                {product.variants[0].storage} / {product.variants[0].color_name}
+                                            </p>
 
-                                    <p className="text-[13px] font-medium text-gray-600 ">
-                                        {formatPrice(1000)}
-                                    </p>
+                                            <p className="text-[13px] font-medium text-gray-600 ">
+                                                {formatPrice(product.variants[0].price)}
+                                            </p>
 
 
-                                </div>
-                            </button>
-                        </li>
+                                        </div>
+                                    </button>
+                                </li>
+                            ))
+                        }
                     </ul>
                 ) : (
                     <p className="text-sm text-gray-600">No se encontraron resultados</p>

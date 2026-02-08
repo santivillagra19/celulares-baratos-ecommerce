@@ -1,42 +1,38 @@
 import { create, type StateCreator } from "zustand";
-import type { Product, VariantProduct } from "../interfaces";
+import type { ICartItem } from "../interfaces";
 import { devtools, persist } from "zustand/middleware";
 
+export interface CartState {
+    cart: ICartItem[];
 
-export interface CartItem {
-    product: Product;
-    variant: VariantProduct;
-    quantity: number;
-}
-
-interface CartState {
-    cart: CartItem[];
-    addToCart: (product: Product, variant: VariantProduct, quantity: number) => void;
+    addToCart: (item: ICartItem) => void;
     removeFromCart: (variantId: string) => void;
+    updateQuantity: (variantId: string, quantity: number) => void;
+    cleanCart: () => void;
     getTotalItems: () => number;
     getTotalPrice: () => number;
 }
 
 const storeApi: StateCreator<CartState> = (set, get) => ({
-    cart: [],
+    cart: [] as ICartItem[],
 
-    addToCart: (product, variant, quantity) => {
+    addToCart: (item) => {
         const { cart } = get();
 
-        const productInCart = cart.some(item => item.variant.id === variant.id);
+        const productInCart = cart.some(cartItem => cartItem.variantId === item.variantId);
 
         if (!productInCart) {
             set({
-                cart: [...cart, { product, variant, quantity }]
+                cart: [...cart, item]
             });
             return;
         }
 
-        const updatedCart = cart.map(item => {
-            if (item.variant.id === variant.id) {
-                return { ...item, quantity: item.quantity + quantity }
+        const updatedCart = cart.map(cartItem => {
+            if (cartItem.variantId === item.variantId) {
+                return { ...cartItem, quantity: cartItem.quantity + item.quantity }
             }
-            return item;
+            return cartItem;
         });
 
         set({ cart: updatedCart });
@@ -44,7 +40,27 @@ const storeApi: StateCreator<CartState> = (set, get) => ({
 
     removeFromCart: (variantId) => {
         const { cart } = get();
-        set({ cart: cart.filter(item => item.variant.id !== variantId) });
+        set({ cart: cart.filter(item => item.variantId !== variantId) });
+    },
+
+    updateQuantity: (variantId, quantity) => {
+        const { cart } = get();
+
+        // Validación opcional: No permitir menos de 1
+        if (quantity < 1) return;
+
+        const updatedCart = cart.map(item => {
+            if (item.variantId === variantId) {
+                return { ...item, quantity };
+            }
+            return item;
+        });
+
+        set({ cart: updatedCart });
+    },
+
+    cleanCart: () => {
+        set({ cart: [] });
     },
 
     getTotalItems: () => {
@@ -54,10 +70,8 @@ const storeApi: StateCreator<CartState> = (set, get) => ({
 
     getTotalPrice: () => {
         const { cart } = get();
-        return cart.reduce((acc, item) => acc + (item.variant.price * item.quantity), 0);
+        return cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     },
-
-
 });
 
 export const useCartStore = create<CartState>()(

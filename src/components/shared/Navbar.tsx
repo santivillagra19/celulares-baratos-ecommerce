@@ -7,6 +7,7 @@ import { useGlobalStore } from "../../store/global.store";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
+    const setActiveNavMobile = useGlobalStore(state => state.setActiveNavMobile);
 
     return <header className="bg-white text-black py-4 flex items-center justify-between px-5 border-b border-slate-200
     lg:px-12">
@@ -49,7 +50,7 @@ export const Navbar = () => {
             </button>
         </div>
 
-        <button className="md:hidden">
+        <button className="md:hidden" onClick={() => setActiveNavMobile(true)}>
             <FaBarsStaggered size={25}></FaBarsStaggered>
         </button>
     </header>
