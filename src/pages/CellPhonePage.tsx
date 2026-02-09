@@ -12,7 +12,7 @@ import { Tag } from "../components/shared/Tag";
 import { useProductSelection } from "../hooks/products/useProductSelection";
 import { useCartStore } from "../store/cart.store";
 import { useGlobalStore } from "../store/global.store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export const CellPhonePage = () => {
@@ -43,45 +43,40 @@ export const CellPhonePage = () => {
 
     const decrement = () => setCount(c => Math.max(1, c - 1));
 
-    const handleAddToCart = () => {
-        if (selectedVariant && product) {
-            addToCart({
-                variantId: selectedVariant.id,
-                productId: product.id,
-                name: product.name,
-                image: product.images[0],
-                color: selectedColor ? colors[selectedColor].name : null,
-                storage: selectedStorage,
-                price: selectedVariant.price,
-                quantity: count,
-            });
+    const getProductPayload = () => {
+        if (!selectedVariant || !product) return null;
 
+        return {
+            variantId: selectedVariant.id,
+            productId: product.id,
+            name: product.name,
+            image: product.images[0],
+            color: selectedColor ? colors[selectedColor].name : null,
+            storage: selectedStorage,
+            price: selectedVariant.price,
+            quantity: count,
+        };
+    };
+
+    const handleAddToCart = () => {
+        const payload = getProductPayload();
+        if (payload) {
+            addToCart(payload);
             setCount(1);
             openSheet('cart');
         }
     };
 
     const handleBuyNow = () => {
-        if (selectedVariant && product) {
-            addToCart({
-                variantId: selectedVariant.id,
-                productId: product.id,
-                name: product.name,
-                image: product.images[0],
-                color: selectedColor ? colors[selectedColor].name : null,
-                storage: selectedStorage,
-                price: selectedVariant.price,
-                quantity: count,
-            });
-
-            navigate('/checkout')
-        };
-    }
+        const payload = getProductPayload();
+        if (payload) {
+            addToCart(payload);
+            navigate('/checkout');
+        }
+    };
 
     //  Obtener el stock
     const isOutStock = selectedVariant?.stock === 0;
-
-    //  Funcion para añadir al carrito
 
     if (isLoading) {
         return (

@@ -5,12 +5,14 @@ import { useGlobalStore } from "../../store/global.store";
 import { formatPrice } from "../../helpers";
 import { searchProducts } from "../../actions/product";
 import type { Product } from "../../interfaces";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Product[]>([]);
 
     const closeSheet = useGlobalStore(state => state.closeSheet);
+    const navigate = useNavigate();
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,7 +52,13 @@ export const Search = () => {
                         {
                             searchResults.map(product => (
                                 <li className="py-2 group" key={product.id}>
-                                    <button className="flex items-center gap-3">
+                                    <button
+                                        className="flex items-center gap-3"
+                                        onClick={() => {
+                                            navigate(`/celulares/${product.slug}`);
+                                            closeSheet();
+                                        }}
+                                    >
                                         <img src={product.images[0]} alt={product.name} className="h-20 w-20 object-contain p-3" />
                                         <div className="flex flex-col gap-1">
                                             <p className="text-sm font-semibold group-hover:underline">
