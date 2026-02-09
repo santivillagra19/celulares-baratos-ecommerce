@@ -48,6 +48,7 @@ export const CellPhonesPage = () => {
                                 {
                                     preparedProducts.map(product => (
                                         <CardProduct
+                                            productId={product.id}
                                             key={product.id}
                                             name={product.name}
                                             price={product.price}

@@ -63,6 +63,8 @@ export const CellPhonePage = () => {
     //  Obtener el stock
     const isOutStock = selectedVariant?.stock === 0;
 
+    //  Funcion para añadir al carrito
+
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-[80vh]">

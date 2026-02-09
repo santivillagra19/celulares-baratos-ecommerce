@@ -50,7 +50,7 @@ export const CartItem = ({ item }: Props) => {
                         <button
                             onClick={decrement}
                             disabled={item.quantity === 1}
-                            className="p-1 text-slate-600 hover:text-black disabled:opacity-30"
+                            className="p-1 text-slate-600 hover:text-black disabled:opacity-30 cursor-pointer"
                         >
                             <LuMinus size={12} />
                         </button>
@@ -61,7 +61,7 @@ export const CartItem = ({ item }: Props) => {
 
                         <button
                             onClick={increment}
-                            className="p-1 text-slate-600 hover:text-black"
+                            className="p-1 text-slate-600 hover:text-black cursor-pointer"
                         >
                             <LuPlus size={12} />
                         </button>
@@ -69,7 +69,7 @@ export const CartItem = ({ item }: Props) => {
 
                     <button
                         onClick={() => removeItem(item.variantId)}
-                        className="text-gray-400 hover:text-red-500 transition-colors"
+                        className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
                     >
                         <LuTrash2 size={18} />
                     </button>
