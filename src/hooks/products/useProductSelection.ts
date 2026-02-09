@@ -30,27 +30,33 @@ export const useProductSelection = (product: Product | undefined) => {
 
             return acc;
         }, {} as Acc) || {};
-    }, [product?.variants]);
+    }, [product]);
 
     const availableColors = Object.keys(colors);
 
     useEffect(() => {
-        if (!selectedColor && availableColors.length > 0 && product) {
+        if (!product || availableColors.length === 0) return;
+
+        // Caso A: No hay nada seleccionado (carga inicial)
+        // Caso B: El color que estaba seleccionado YA NO EXISTE en el nuevo producto (cambio de página)
+        const isCurrentSelectionInvalid = !selectedColor || !colors[selectedColor];
+
+        if (isCurrentSelectionInvalid) {
             const firstColor = availableColors[0];
             setSelectedColor(firstColor);
-            setSelectedStorage(colors[firstColor].storages[0]);
+
+            if (colors[firstColor] && colors[firstColor].storages.length > 0) {
+                setSelectedStorage(colors[firstColor].storages[0]);
+            }
         }
     }, [product, availableColors, selectedColor, colors]);
 
-    // 3. Lógica derivada (No necesita useEffect, se calcula al vuelo)
     const selectedVariant = product?.variants.find(
         (v) => v.color === selectedColor && v.storage === selectedStorage
     ) || null;
 
-    // 4. Manejadores inteligentes (Evitan useEffects en cadena)
     const handleColorChange = (newColor: string) => {
         setSelectedColor(newColor);
-        // Al cambiar color, reseteamos el storage al primero disponible de ese color automáticamente
         if (colors[newColor]) {
             setSelectedStorage(colors[newColor].storages[0]);
         }

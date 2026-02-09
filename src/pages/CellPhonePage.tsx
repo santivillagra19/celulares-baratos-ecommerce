@@ -35,6 +35,10 @@ export const CellPhonePage = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        setCount(1);
+    }, [slug]);
+
     const increment = () => {
         if (selectedVariant && count < selectedVariant.stock) {
             setCount(c => c + 1)
@@ -44,6 +48,10 @@ export const CellPhonePage = () => {
     const decrement = () => setCount(c => Math.max(1, c - 1));
 
     const getProductPayload = () => {
+        const colorName = (selectedColor !== null && colors[selectedColor])
+            ? colors[selectedColor].name
+            : null;
+
         if (!selectedVariant || !product) return null;
 
         return {
@@ -51,7 +59,7 @@ export const CellPhonePage = () => {
             productId: product.id,
             name: product.name,
             image: product.images[0],
-            color: selectedColor ? colors[selectedColor].name : null,
+            color: colorName,
             storage: selectedStorage,
             price: selectedVariant.price,
             quantity: count,
@@ -94,7 +102,7 @@ export const CellPhonePage = () => {
         )
     }
 
-    return <div>
+    return <div key={slug}>
         <div className="h-fit flex flex-col md:flex-row gap-16 mt-8">
             <div>
                 <GridImages images={product.images} />
@@ -130,7 +138,7 @@ export const CellPhonePage = () => {
 
                 <div className="flex flex-col gap-3">
                     <p>
-                        Color: {selectedColor && colors[selectedColor].name}
+                        Color: {selectedColor !== null && colors[selectedColor]?.name}
                     </p>
                     <div className="flex gap-3">
                         {availableColors.map((color) => (
@@ -151,7 +159,7 @@ export const CellPhonePage = () => {
                         Almacenamiento disponible
                     </p>
 
-                    {selectedColor && (
+                    {selectedColor !== null && colors[selectedColor] && (
                         <div className="flex gap-3">
                             <select
                                 className="border border-gray-300 rounded-lg px-3 py-1"
