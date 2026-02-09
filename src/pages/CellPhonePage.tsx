@@ -4,7 +4,7 @@ import { LuMinus, LuPlus } from "react-icons/lu";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { BsChatLeftText } from "react-icons/bs";
 import { LuLoader } from "react-icons/lu"
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { GridImages } from "../components/one-product/GridImages";
 import { ProductDescription } from "../components/one-product/ProductDescription";
 import { useProduct } from "../hooks/products/useProduct";
@@ -33,6 +33,7 @@ export const CellPhonePage = () => {
 
     const addToCart = useCartStore(state => state.addToCart);
     const openSheet = useGlobalStore(state => state.openSheet);
+    const navigate = useNavigate();
 
     const increment = () => {
         if (selectedVariant && count < selectedVariant.stock) {
@@ -60,6 +61,23 @@ export const CellPhonePage = () => {
         }
     };
 
+    const handleBuyNow = () => {
+        if (selectedVariant && product) {
+            addToCart({
+                variantId: selectedVariant.id,
+                productId: product.id,
+                name: product.name,
+                image: product.images[0],
+                color: selectedColor ? colors[selectedColor].name : null,
+                storage: selectedStorage,
+                price: selectedVariant.price,
+                quantity: count,
+            });
+
+            navigate('/checkout')
+        };
+    }
+
     //  Obtener el stock
     const isOutStock = selectedVariant?.stock === 0;
 
@@ -82,7 +100,6 @@ export const CellPhonePage = () => {
     }
 
     return <div>
-
         <div className="h-fit flex flex-col md:flex-row gap-16 mt-8">
             <div>
                 <GridImages images={product.images} />
@@ -193,8 +210,11 @@ export const CellPhonePage = () => {
                         py-4 rounded-full transition-all duration-300 hover:bg-[#e2e2e2] cursor-pointer w-full">
                                     Agregar al carrito
                                 </button>
-                                <button className="bg-black text-white uppercase font-semibold tracking-widest text-xs 
-                                rounded-full py-4 cursor-pointer w-full hover:bg-slate-900 transition-all duration-300">
+                                <button
+                                    onClick={handleBuyNow}
+                                    className="bg-black text-white uppercase font-semibold tracking-widest text-xs 
+                                rounded-full py-4 cursor-pointer w-full hover:bg-slate-900 transition-all duration-300"
+                                >
                                     Comprar ahora
                                 </button>
                             </div>
