@@ -19,7 +19,7 @@ export const LoginPage = () => {
         return <LuLoader />
     };
 
-    if (session) {
+    if (session?.session) {
         return <Navigate to='/' />
     };
 

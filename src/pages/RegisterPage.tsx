@@ -48,7 +48,7 @@ export const RegisterPage = () => {
         return <LuLoader />
     };
 
-    if (session) {
+    if (session?.session) {
         return <Navigate to='/' />
     };
 

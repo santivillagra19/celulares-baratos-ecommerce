@@ -20,10 +20,18 @@ export const signUp = async ({
 
 }: IAuthRegister) => {
     try {
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) {
-            throw new Error(error.message);
-        };
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    full_name: fullName,
+                    phone: phone,
+                }
+            }
+        });
+
+        if (error) throw new Error(error.message);
 
         const userId = data.user?.id;
         if (!userId) {

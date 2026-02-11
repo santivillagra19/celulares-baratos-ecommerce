@@ -15,9 +15,16 @@ export const Navbar = () => {
     const totalItemsInCart = useCartStore(state => state.getTotalItems());
 
     const [isScrolled, setIsScrolled] = useState(false);
-
     const { session, isLoading } = useUser();
-    const userId = session?.session?.user.id;
+
+    const user = session?.session?.user;
+    const userMetaData = user?.user_metadata;
+
+    const userInitial = userMetaData?.full_name
+        ? userMetaData.full_name[0].toUpperCase()
+        : user?.email
+            ? user.email[0].toUpperCase()
+            : 'U';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -64,12 +71,12 @@ export const Navbar = () => {
             </button>
 
             {isLoading ? (
-                <LuLoader className="animate-spin" size={60} />
+                <LuLoader className="animate-spin" size={25} />
             ) : session?.session ? (
                 <div className="relative ">
                     <Link to='/account' className="border-2 border-slate-700 w-9 h-9 rounded-full grid place-items-center text-lg
                 font-bold cursor-pointer">
-                        R
+                        {userInitial}
                     </Link>
                 </div>
             ) : (

@@ -18,7 +18,17 @@ export const ClientLayout = () => {
         })
     }, [navigate]);
 
-    if (isLoadingSession) return <BiLoader />
+    if (isLoadingSession) {
+        return (
+            <div className="h-screen w-full flex items-center justify-center">
+                <BiLoader className="text-4xl animate-spin" />
+            </div>
+        );
+    }
+
+    if (!session) {
+        return <Navigate to="/login" replace />;
+    }
 
     const handleLogOut = async () => {
         await signOut();
