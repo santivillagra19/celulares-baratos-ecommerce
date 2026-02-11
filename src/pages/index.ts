@@ -4,3 +4,4 @@ export * from './AboutPage';
 export * from './CellPhonePage';
 export * from './LoginPage';
 export * from './RegisterPage';
+export * from './OrdersUserPage';

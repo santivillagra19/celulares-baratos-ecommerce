@@ -57,7 +57,10 @@ export const signUp = async ({
 
 
     } catch (error) {
-        throw new Error('Error al registrar al usuario')
+        if (error instanceof Error) {
+            throw new Error(error.message);
+        }
+        throw new Error('Error desconocido al registrar al usuario');
     }
 };
 
@@ -71,7 +74,7 @@ export const signIn = async ({ email, password }: IAuthLogin) => {
 };
 
 export const signOut = async () => {
-    const { error } = supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
     if (error) {
         throw new Error('Error al cerrar sesión');
     }

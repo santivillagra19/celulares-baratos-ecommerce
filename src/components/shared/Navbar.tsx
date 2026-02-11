@@ -1,11 +1,13 @@
 import { Link, NavLink } from "react-router-dom";
 import { navbarLinks } from "../../constants/links";
-import { HiOutlineSearch, HiOutlineShoppingBag } from "react-icons/hi";
+import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineUser } from "react-icons/hi";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Logo } from "./Logo";
 import { useGlobalStore } from "../../store/global.store";
 import { useCartStore } from "../../store/cart.store";
 import { useEffect, useState } from "react";
+import { useUser } from "../../hooks";
+import { LuLoader } from "react-icons/lu";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
@@ -13,6 +15,9 @@ export const Navbar = () => {
     const totalItemsInCart = useCartStore(state => state.getTotalItems());
 
     const [isScrolled, setIsScrolled] = useState(false);
+
+    const { session, isLoading } = useUser();
+    const userId = session?.session?.user.id;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -32,7 +37,7 @@ export const Navbar = () => {
                 transition-all duration-300 ease-in-out border-b
                 
                 ${isScrolled
-            ? 'bg-white/70 backdrop-blur-lg shadow-sm border-transparent hover:bg-white hover:shadow-none hover:border-slate-200'
+            ? 'bg-white/50 backdrop-blur-lg shadow-sm border-transparent hover:bg-white hover:shadow-none hover:border-slate-200'
             : 'bg-white border-slate-200 shadow-none'
         }
             `}>
@@ -58,12 +63,23 @@ export const Navbar = () => {
                 <HiOutlineSearch size={25}></HiOutlineSearch>
             </button>
 
-            <div className="relative ">
-                <Link to='/account' className="border-2 border-slate-700 w-9 h-9 rounded-full grid place-items-center text-lg
+            {isLoading ? (
+                <LuLoader className="animate-spin" size={60} />
+            ) : session?.session ? (
+                <div className="relative ">
+                    <Link to='/account' className="border-2 border-slate-700 w-9 h-9 rounded-full grid place-items-center text-lg
                 font-bold cursor-pointer">
-                    R
+                        R
+                    </Link>
+                </div>
+            ) : (
+                <Link to={'/login'}>
+                    <HiOutlineUser size={25} />
                 </Link>
-            </div>
+            )
+            }
+
+
 
             <button className="relative cursor-pointer" onClick={() => openSheet('cart')}>
                 <span className="absolute -bottom-2 -right-2 w-5 h-5 grid place-items-center bg-black text-white text-xs
