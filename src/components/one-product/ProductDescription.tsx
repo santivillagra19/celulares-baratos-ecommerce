@@ -19,7 +19,7 @@ export const ProductDescription = ({ content }: Props) => {
 
 
     return <div>
-        <h2 className="text-2xl font-bold text-center mb-8 underline">
+        <h2 className="text-2xl font-bold text-center mb-8 underline mt-10">
             Descripción
         </h2>
         <EditorContent editor={editor} >

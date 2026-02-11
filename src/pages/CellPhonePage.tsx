@@ -103,12 +103,12 @@ export const CellPhonePage = () => {
     }
 
     return <div key={slug}>
-        <div className="h-fit flex flex-col md:flex-row gap-16 mt-8">
+        <div className="h-fit flex flex-col md:flex-row gap-8 lg:gap-16 pt-14">
             <div>
                 <GridImages images={product.images} />
             </div>
 
-            <div className="flex-1 space-y-5">
+            <div className="flex-1 space-y-4">
                 <h1 className="text-3xl font-bold tracking-tight">
                     {product.name}
                 </h1>
@@ -125,7 +125,7 @@ export const CellPhonePage = () => {
 
                 <Separator />
 
-                <ul className="space-y-2 ml-7 my-10">
+                <ul className="space-y-2 ml-5 my-5">
                     {
                         product.features.map((feature) => (
                             <li key={feature} className="text-sm flex items-center gap-2 tracking-tight font-medium">
@@ -206,7 +206,7 @@ export const CellPhonePage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
                                 <button
                                     onClick={handleAddToCart}
                                     className="bg-[#f3f3f3] uppercase font-semibold tracking-widest text-xs 
@@ -225,7 +225,7 @@ export const CellPhonePage = () => {
                     )
                 }
 
-                <div className="grid grid-cols-2 pt-2 gap-4 mt-6">
+                <div className="grid grid-cols-2 pt-2 gap-4">
                     <div className="flex flex-col gap-2 p-2 flex-1 items-center justify-center">
                         <CiDeliveryTruck size={35} />
                         <p className="text-xs font-semibold text-center">Envío gratis a todo el país</p>

@@ -28,7 +28,7 @@ export const CellPhonesPage = () => {
 
     return (
         <>
-            <h1 className="text-5xl font-semibold text-center mb-12">
+            <h1 className="text-5xl font-semibold text-center mb-12 pt-20">
                 Celulares
             </h1>
 

@@ -5,14 +5,37 @@ import { FaBarsStaggered } from "react-icons/fa6";
 import { Logo } from "./Logo";
 import { useGlobalStore } from "../../store/global.store";
 import { useCartStore } from "../../store/cart.store";
+import { useEffect, useState } from "react";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
     const setActiveNavMobile = useGlobalStore(state => state.setActiveNavMobile);
     const totalItemsInCart = useCartStore(state => state.getTotalItems());
 
-    return <header className="bg-white text-black py-4 flex items-center justify-between px-5 border-b border-slate-200
-    lg:px-12">
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 10) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    return <header className={`
+                fixed top-0 left-0 w-full z-50 px-5 lg:px-12 py-4 flex items-center justify-between
+                transition-all duration-300 ease-in-out border-b
+                
+                ${isScrolled
+            ? 'bg-white/70 backdrop-blur-lg shadow-sm border-transparent hover:bg-white hover:shadow-none hover:border-slate-200'
+            : 'bg-white border-slate-200 shadow-none'
+        }
+            `}>
         <Logo />
 
         <nav className="space-x-5 hidden md:flex">
@@ -22,7 +45,7 @@ export const Navbar = () => {
                         key={link.id}
                         to={link.href}
                         className={({ isActive }) => `${isActive ? 'text-cyan-600 underline' : ''} transition-all
-                        duration-300 font-medium hover:text-cyan-600 hover:underline`}
+                        duration-300 font-medium hover:text-cyan-600 hover:underline-none`}
                     >
                         {link.title}
                     </NavLink>
@@ -31,7 +54,7 @@ export const Navbar = () => {
         </nav>
 
         <div className="flex gap-5 items-center ">
-            <button onClick={() => openSheet('search')} className="cursor-pointer" >
+            <button onClick={() => openSheet('search')} className="cursor-pointer p-2 rounded-full hover:bg-slate-100 transition-colors duration-200" >
                 <HiOutlineSearch size={25}></HiOutlineSearch>
             </button>
 
