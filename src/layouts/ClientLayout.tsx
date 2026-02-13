@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { Navigate, NavLink, Outlet, useNavigate } from "react-router-dom"
 import { signOut } from "../actions"
 import { useUser } from "../hooks";
 import { useEffect } from "react";
