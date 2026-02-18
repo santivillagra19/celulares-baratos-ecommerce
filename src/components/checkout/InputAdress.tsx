@@ -1,13 +1,13 @@
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { FieldErrors, FieldPath, UseFormRegister } from "react-hook-form";
 import type { AddressFormValues } from "../../lib/validators";
 
 interface Props {
     register: UseFormRegister<AddressFormValues>;
     errors: FieldErrors<AddressFormValues>;
 
-    name: keyof AddressFormValues;
+    name: FieldPath<AddressFormValues>;
     className?: string;
-    placeholder: string;
+    placeholder?: string;
 }
 
 export const InputAdress = ({ register, errors, name, className, placeholder }: Props) => {

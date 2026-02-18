@@ -2,17 +2,68 @@ import { useForm } from "react-hook-form"
 import { InputAdress } from "./InputAdress"
 import { addressSchema, type AddressFormValues } from "../../lib/validators"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { ItemsCheckout } from "./ItemsCheckout"
+import { useCreateOrder } from "../../hooks"
+import { useCartStore } from "../../store/cart.store"
+import { ImSpinner2 } from "react-icons/im";
 
 export const FormCheckout = () => {
+    // 1. Alineamos los defaultValues con tu esquema (validators.ts)
     const { register, formState: { errors }, handleSubmit } = useForm<AddressFormValues>({
-        resolver: zodResolver(addressSchema)
+        resolver: zodResolver(addressSchema),
+        defaultValues: {
+            country: "Argentina",
+            addressLine2: "",
+            codPostal: "",
+            city: "",   // Usamos 'city' porque así está en tu Zod
+            state: ""   // Usamos 'state' porque así está en tu Zod
+        }
     });
 
-    const onSubmit = (data => {
-        console.log(data);
+    const { mutate: createOrder, isPending } = useCreateOrder();
+    const cleanCart = useCartStore(state => state.cleanCart);
+    const cartItems = useCartStore(state => state.cart);
+    const totalAmount = useCartStore(state => state.getTotalPrice());
 
-    });
+    const onSubmit = (data: AddressFormValues) => {
+        // Al usar el validator correcto, 'data' ahora sí tiene las propiedades en inglés
 
+        const orderInput = {
+            address: {
+                // Lado Izquierdo: Lo que pide la Base de Datos
+                // Lado Derecho: Lo que viene del Formulario (data)
+
+                addressLine1: data.addressLine1,
+                addressLine2: data.addressLine2,
+                city: data.city,        // <--- Ahora sí coinciden
+                state: data.state,      // <--- Ahora sí coinciden
+                codPostal: data.codPostal, // Usamos codPostal tal como lo espera OrderInput
+                country: data.country,
+
+            },
+            cartItems: cartItems.map(item => ({
+                variantId: item.variantId,
+                quantity: item.quantity,
+                price: Number(item.price),
+            })),
+            totalAmount,
+        };
+
+        createOrder(orderInput, {
+            onSuccess: () => {
+                cleanCart();
+            },
+        });
+    };
+
+    if (isPending) {
+        return (
+            <div className="flex flex-col gap-3 items-center justify-center py-40">
+                <ImSpinner2 className="animate-spin h-10 w-10 text-black" />
+                <p className="text-sm font-medium">Estamos procesando su pedido...</p>
+            </div>
+        )
+    }
 
     return <div className="max-w-lg w-full">
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
@@ -35,17 +86,19 @@ export const FormCheckout = () => {
                     placeholder="Dirección adicional"
                 />
 
+                {/* CAMBIO CLAVE: name="state" para coincidir con el Schema */}
                 <InputAdress
                     register={register}
                     errors={errors}
-                    name="provincia"
+                    name="state"
                     placeholder="Provincia"
                 />
 
+                {/* CAMBIO CLAVE: name="city" para coincidir con el Schema */}
                 <InputAdress
                     register={register}
                     errors={errors}
-                    name="ciudad"
+                    name="city"
                     placeholder="Ciudad"
                 />
 
@@ -59,7 +112,7 @@ export const FormCheckout = () => {
                 <select
                     className="border border-slate-200 rounded-md p-2 cursor-pointer text-sm bg-white
                     focus:outline-none focus:ring-1 focus:ring-black"
-                    {...register('pais')}
+                    {...register('country')}
                 >
                     <option value="Argentina">Argentina</option>
                 </select>
@@ -69,7 +122,6 @@ export const FormCheckout = () => {
                 <p className="text-sm font-medium">
                     Métodos de envío
                 </p>
-
                 <div className="flex justify-between items-center border border-gray-300 bg-stone-100 py-3 rounded-md px-4 cursor-pointer hover:border-black transition-colors">
                     <div className="font-normal text-gray-700">Standard</div>
                     <div className="font-semibold text-gray-900">Gratis</div>
@@ -97,8 +149,7 @@ export const FormCheckout = () => {
                 <h3 className="font-semibold text-xl">
                     Resumen del pedido
                 </h3>
-
-                {/* LISTA DE ELEMENTOS */}
+                <ItemsCheckout />
             </div>
 
             <button className="bg-black text-white py-3 text-sm font-medium tracking-wide rounded-md 

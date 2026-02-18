@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useCartStore } from "../store/cart.store"
 import { FormCheckout } from "../components/checkout/FormCheckout";
+import { ItemsCheckout } from "../components/checkout/ItemsCheckout";
 
 export const CheckOutPage = () => {
     const totalItems = useCartStore(state => state.getTotalItems());
@@ -48,7 +49,7 @@ export const CheckOutPage = () => {
                                 minHeight: 'calc(100vh - 100px)'
                             }}
                         >
-
+                            <ItemsCheckout />
                         </div>
                     </>
                 )
