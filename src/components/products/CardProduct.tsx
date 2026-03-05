@@ -44,18 +44,16 @@ export const CardProduct = ({
     const [activeStorage, setActiveStorage] = useState<string | null>(availableStorages[0] || null);
 
     // 4. Lógica de Selección (Cruce de Color + Almacenamiento)
-    // Buscamos la variante exacta que coincida con AMBOS criterios
     const exactVariant = variants.find(
         variant =>
             (variant.color === activeColor?.color || variant.color === activeColor?.name) &&
             variant.storage === activeStorage
     );
 
-    // Si no existe la combinación exacta (ej: Rojo de 256GB no existe), 
+    // Si no existe la combinación exacta (ej: Rojo de 256GB no existe)
     // buscamos una variante que tenga al menos el almacenamiento correcto para mostrar el precio bien.
     const displayVariant = exactVariant || variants.find(v => v.storage === activeStorage) || variants[0];
 
-    // Datos dinámicos basados en la selección
     const stock = displayVariant?.stock ?? 0;
     const currentPrice = displayVariant?.price || price;
 
@@ -116,7 +114,7 @@ export const CardProduct = ({
                     {formatPrice(currentPrice)}
                 </p>
 
-                {/* SELECTOR DE ALMACENAMIENTO (NUEVO) */}
+                {/* SELECTOR DE ALMACENAMIENTO */}
                 {availableStorages.length > 0 && (
                     <div className="flex flex-wrap justify-center gap-2 mt-1">
                         {availableStorages.map((storage) => (
@@ -126,8 +124,8 @@ export const CardProduct = ({
                                 className={`
                                     text-xs px-2.5 py-1 rounded border transition-all duration-200
                                     ${activeStorage === storage
-                                        ? 'bg-slate-800 text-white border-slate-800 shadow-sm' // Activo
-                                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400' // Inactivo
+                                        ? 'bg-slate-800 text-white border-slate-800 shadow-sm'
+                                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
                                     }
                                 `}
                             >

@@ -28,7 +28,7 @@ export const ContainerFilter = ({
         }
     };
 
-    return <div className="p-5 border border-slate-200 rounded-lg h-fit col-span-1">
+    return <div className="p-5 border border-slate-200 rounded-lg h-fit col-span-1 sticky top-20">
         <h3 className="font-semibold text-xl mb-4">
             Filtros
         </h3>

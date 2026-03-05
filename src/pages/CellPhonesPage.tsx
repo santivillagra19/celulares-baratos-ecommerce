@@ -32,7 +32,7 @@ export const CellPhonesPage = () => {
                 Celulares
             </h1>
 
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[280px_1fr] lg:grid-cols-3 xl:grid-cols-5">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-[280px_1fr] md:gap-10 lg:gap-12 lg:grid-cols-3 xl:grid-cols-5 items-start">
                 <ContainerFilter
                     setSelectedBrands={setSelectedBrands}
                     selectedBrands={selectedBrands}
