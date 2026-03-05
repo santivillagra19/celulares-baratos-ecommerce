@@ -8,15 +8,14 @@ import { useCartStore } from "../../store/cart.store"
 import { ImSpinner2 } from "react-icons/im";
 
 export const FormCheckout = () => {
-    // 1. Alineamos los defaultValues con tu esquema (validators.ts)
     const { register, formState: { errors }, handleSubmit } = useForm<AddressFormValues>({
         resolver: zodResolver(addressSchema),
         defaultValues: {
             country: "Argentina",
             addressLine2: "",
             codPostal: "",
-            city: "",   // Usamos 'city' porque así está en tu Zod
-            state: ""   // Usamos 'state' porque así está en tu Zod
+            city: "",
+            state: ""
         }
     });
 
@@ -26,18 +25,14 @@ export const FormCheckout = () => {
     const totalAmount = useCartStore(state => state.getTotalPrice());
 
     const onSubmit = (data: AddressFormValues) => {
-        // Al usar el validator correcto, 'data' ahora sí tiene las propiedades en inglés
 
         const orderInput = {
             address: {
-                // Lado Izquierdo: Lo que pide la Base de Datos
-                // Lado Derecho: Lo que viene del Formulario (data)
-
                 addressLine1: data.addressLine1,
                 addressLine2: data.addressLine2,
-                city: data.city,        // <--- Ahora sí coinciden
-                state: data.state,      // <--- Ahora sí coinciden
-                codPostal: data.codPostal, // Usamos codPostal tal como lo espera OrderInput
+                city: data.city,
+                state: data.state,
+                codPostal: data.codPostal,
                 country: data.country,
 
             },
@@ -86,7 +81,6 @@ export const FormCheckout = () => {
                     placeholder="Dirección adicional"
                 />
 
-                {/* CAMBIO CLAVE: name="state" para coincidir con el Schema */}
                 <InputAdress
                     register={register}
                     errors={errors}
@@ -94,7 +88,6 @@ export const FormCheckout = () => {
                     placeholder="Provincia"
                 />
 
-                {/* CAMBIO CLAVE: name="city" para coincidir con el Schema */}
                 <InputAdress
                     register={register}
                     errors={errors}
