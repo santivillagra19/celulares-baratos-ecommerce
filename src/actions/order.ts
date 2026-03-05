@@ -1,6 +1,19 @@
 import type { OrderInput } from "../interfaces/order.interface";
 import { supabase } from "../supabase/client";
 
+interface OrderItemFromDB {
+    quantity: number;
+    price: number;
+    variants: {
+        color_name: string;
+        storage: string;
+        products: {
+            name: string;
+            images: string[] | null;
+        }
+    }
+}
+
 export const createOrder = async (order: OrderInput) => {
     const { data, error: errorUser } = await supabase.auth.getUser();
 
@@ -107,3 +120,50 @@ export const createOrder = async (order: OrderInput) => {
     return orderData;
 };
 
+
+export const getOrdersByCustomerId = async () => {
+    const { data: orders, error } = await supabase
+        .from('orders')
+        .select('id, total_amount, created_at, status')
+        .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+
+    return orders;
+};
+
+
+export const getOrderById = async (orderId: number) => {
+    const { data: order, error } = await supabase
+        .from('orders')
+        .select(`*,addresses(*), customers(full_name, email), order_items(quantity, price, variants(color_name,storage, products(name, images)))`)
+        .eq('id', orderId)
+        .single();
+
+    if (error) throw new Error(error.message);
+
+    return {
+        customer: {
+            email: order?.customers?.email,
+            full_name: order?.customers?.full_name,
+        },
+        totalAmount: order?.total_amount,
+        status: order?.status,
+        address: {
+            addressLine1: order?.addresses?.address_line1,
+            addressLine2: order?.addresses?.address_line2,
+            city: order?.addresses?.city,
+            state: order?.addresses?.state,
+            codPostal: order?.addresses?.postal_code,
+            pais: order?.addresses?.country,
+        },
+        orderItems: order?.order_items.map((item: OrderItemFromDB) => ({
+            quantity: item.quantity,
+            price: item.price,
+            color_name: item.variants?.color_name,
+            storage: item.variants?.storage,
+            product_name: item.variants?.products?.name,
+            product_image: item.variants?.products?.images ? item.variants.products.images[0] : null,
+        }))
+    };
+};

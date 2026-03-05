@@ -10,4 +10,5 @@ export * from './auth/useRegister';
 export * from './auth/useUser';
 
 //  ORDER
-export * from './orders/useCreateOrder';
+export * from './orders/useCreateOrder'
+export * from './orders/useOrder';
