@@ -15,3 +15,10 @@ export interface OrderInput {
     }[];
     totalAmount: number;
 };
+
+export interface OrderItemSingle {
+    created_at: string;
+    id: number;
+    status: 'Pending' | 'Paid' | 'Shipped' | 'Delivered';
+    total_amount: number;
+}
