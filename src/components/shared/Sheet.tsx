@@ -38,21 +38,13 @@ export const Sheet = () => {
     };
 
     return (
-        /* CONTENEDOR PADRE:
-           - Quitamos 'invisible' y 'transition'. 
-           - Usamos solo 'z-index' y 'pointer-events'.
-           - Si está cerrado, 'pointer-events-none' deja que los clics pasen a la página de abajo.
-        */
         <div
             className={`
                 fixed inset-0 z-50 flex justify-end
                 ${isSheetOpen ? 'pointer-events-auto' : 'pointer-events-none'}
             `}
         >
-            {/* 1. OVERLAY (FONDO NEGRO):
-               - Este sí maneja su propia opacidad.
-               - pointer-events-auto para que capture el clic de cierre.
-            */}
+
             <div
                 onClick={closeSheet}
                 className={`
@@ -62,11 +54,6 @@ export const Sheet = () => {
                 `}
             />
 
-            {/* 2. PANEL LATERAL:
-               - Maneja su propia transformación.
-               - IMPORTANTE: 'pointer-events-auto' para poder hacer clic DENTRO del carrito
-                 aunque el padre tenga events-none.
-            */}
             <div
                 ref={sheetRef}
                 className={`
@@ -76,7 +63,6 @@ export const Sheet = () => {
                 `}
             >
                 <div className="h-full overflow-y-auto p-6">
-                    {/* Renderizamos siempre, o condicionalmente si prefieres limpiar DOM al cerrar */}
                     {renderContent()}
                 </div>
             </div>

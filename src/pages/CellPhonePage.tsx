@@ -103,7 +103,7 @@ export const CellPhonePage = () => {
     }
 
     return <div key={slug}>
-        <div className="h-fit flex flex-col md:flex-row gap-8 lg:gap-16 pt-14">
+        <div className="h-fit flex flex-col md:flex-row gap-8 lg:gap-16 pt-24 mb-16">
             <div>
                 <GridImages images={product.images} />
             </div>

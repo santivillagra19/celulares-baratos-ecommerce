@@ -8,7 +8,7 @@ export const Logo = () => {
                 <span className="text-cyan-600">Baratos</span>
             </p>
 
-            <p className="flex text-4xl lg:hidden">
+            <p className="flex text-2xl lg:hidden">
                 <span className="text-cyan-600 -skew-x-6">C</span>
                 <span className="text-cyan-600 skew-x-6">B</span>
             </p>

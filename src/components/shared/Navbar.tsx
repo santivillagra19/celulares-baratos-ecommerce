@@ -10,109 +10,98 @@ import { useUser } from "../../hooks";
 import { LuLoader } from "react-icons/lu";
 
 export const Navbar = () => {
-    // Stores y Hooks
     const openSheet = useGlobalStore(state => state.openSheet);
     const setActiveNavMobile = useGlobalStore(state => state.setActiveNavMobile);
     const totalItemsInCart = useCartStore(state => state.getTotalItems());
     const { session, isLoading } = useUser();
 
-    // Estado para el scroll
     const [isScrolled, setIsScrolled] = useState(false);
+    const [showUserMenu, setShowUserMenu] = useState(false);
 
-    // Lógica de usuario simplificada
     const user = session?.session?.user;
     const userInitial = (user?.user_metadata?.full_name || user?.email || 'U')[0].toUpperCase();
 
     useEffect(() => {
-        const handleScroll = () => {
-            // Umbral de 20px para activar el efecto
-            setIsScrolled(window.scrollY > 20);
-        };
-
+        const handleScroll = () => setIsScrolled(window.scrollY > 20);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     return (
-        <header className={`
-            fixed top-0 left-0 w-full z-50 px-5 lg:px-12 py-4 flex items-center justify-between
-            transition-all duration-500 ease-in-out border-b
-            ${isScrolled
-                ? 'bg-white/75 backdrop-blur-md shadow-sm border-slate-200/60 py-3'
-                : 'bg-white border-slate-200 shadow-none py-5'
-            }
-        `}>
-            <Logo />
+        <header className={`fixed top-0 left-0 w-full z-50 transition-all border-b ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm border-slate-100' : 'bg-white border-transparent'
+            }`}>
+            <div className={`max-w-7xl mx-auto px-4 flex items-center justify-between transition-all ${isScrolled ? 'py-0.5' : 'py-1.5'}`}>
+                <Logo />
 
-            {/* Desktop Navigation */}
-            <nav className="space-x-8 hidden md:flex">
-                {navbarLinks.map((link) => (
-                    <NavLink
-                        key={link.id}
-                        to={link.href}
-                        className={({ isActive }) => `
-                            text-base font-semibold transition-colors duration-300
-                            ${isActive ? 'text-cyan-600' : 'text-slate-600 hover:text-cyan-600'}
-                        `}
-                    >
-                        {link.title}
-                    </NavLink>
-                ))}
-            </nav>
+                <nav className="hidden md:flex gap-6">
+                    {navbarLinks.map((link) => (
+                        <NavLink
+                            key={link.id}
+                            to={link.href}
+                            className={({ isActive }) =>
+                                `text-sm font-bold transition-colors ${isActive ? 'text-cyan-600' : 'text-slate-500 hover:text-black'}`
+                            }
+                        >
+                            {link.title}
+                        </NavLink>
+                    ))}
+                </nav>
 
-            {/* Actions (Search, User, Cart) */}
-            <div className="flex gap-4 items-center">
-
-                {/* Botón de búsqueda */}
-                <button
-                    onClick={() => openSheet('search')}
-                    aria-label="Buscar productos"
-                    className="p-2 rounded-full hover:bg-slate-100 transition-colors duration-200"
-                >
-                    <HiOutlineSearch size={24} />
+                <div className="flex gap-3 items-center">
+                <button onClick={() => openSheet('search')} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                    <HiOutlineSearch size={22} />
                 </button>
 
-                {/* Sección de Usuario / Auth */}
-                {isLoading ? (
-                    <LuLoader className="animate-spin text-slate-400" size={22} />
-                ) : session?.session ? (
-                    <Link
-                        to='/account'
-                        title="Mi cuenta"
-                        className="border-2 border-slate-800 w-9 h-9 rounded-full grid place-items-center text-sm font-black 
-                                 hover:bg-slate-800 hover:text-white transition-all duration-300"
-                    >
-                        {userInitial}
-                    </Link>
-                ) : (
-                    <Link to='/login' aria-label="Iniciar sesión" className="p-2">
-                        <HiOutlineUser size={24} className="text-slate-700 hover:text-cyan-600 transition-colors" />
-                    </Link>
-                )}
+                {/* Dropdown de Usuario: Chau links flotantes */}
+                <div className="relative">
+                    {isLoading ? (
+                        <LuLoader className="animate-spin text-slate-400" size={20} />
+                    ) : session?.session ? (
+                        <button
+                            onClick={() => setShowUserMenu(!showUserMenu)}
+                            className="w-9 h-9 rounded-full bg-slate-900 text-white text-xs font-bold flex items-center justify-center hover:scale-105 transition-transform"
+                        >
+                            {userInitial}
+                        </button>
+                    ) : (
+                        <Link to='/login' className="p-2">
+                            <HiOutlineUser size={22} className="text-slate-700" />
+                        </Link>
+                    )}
 
-                {/* Carrito con Badge Dinámico */}
-                <button
-                    className="relative p-2 rounded-full hover:bg-slate-100 transition-colors"
-                    onClick={() => openSheet('cart')}
-                    aria-label={`Ver carrito: ${totalItemsInCart} productos`}
-                >
-                    <HiOutlineShoppingBag size={24} />
+                    {/* El menú que resuelve el problema de la foto */}
+                    {showUserMenu && (
+                        <div className="absolute right-0 mt-3 w-48 bg-white border border-slate-200 shadow-xl rounded-xl py-2 animate-in fade-in zoom-in-95 duration-200">
+                            <Link
+                                to="/account/pedidos"
+                                onClick={() => setShowUserMenu(false)}
+                                className="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-black font-medium"
+                            >
+                                Mis Pedidos
+                            </Link>
+                            <button
+                                onClick={() => { signOut(); setShowUserMenu(false); }}
+                                className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-red-50 font-medium"
+                            >
+                                Cerrar Sesión
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                <button onClick={() => openSheet('cart')} className="relative p-2">
+                    <HiOutlineShoppingBag size={22} />
                     {totalItemsInCart > 0 && (
-                        <span className="absolute top-1 right-1 min-w-[18px] h-[18px] px-1 grid place-items-center 
-                                       bg-cyan-600 text-white text-[10px] font-bold rounded-full animate-in zoom-in duration-300">
+                        <span className="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                             {totalItemsInCart}
                         </span>
                     )}
                 </button>
 
-                {/* Mobile Menu Trigger */}
-                <button
-                    className="md:hidden p-2 text-slate-800"
-                    onClick={() => setActiveNavMobile(true)}
-                    aria-label="Abrir menú de navegación"
-                >
-                    <FaBarsStaggered size={22} />
+                <button onClick={() => setActiveNavMobile(true)} className="md:hidden">
+                    <FaBarsStaggered size={20} />
                 </button>
+            </div>
             </div>
         </header>
     );

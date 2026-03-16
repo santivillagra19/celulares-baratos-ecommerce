@@ -1,14 +1,14 @@
 
 export const AboutPage = () => {
     return (
-        <div className="space-y-5 pt-14">
+        <div className="space-y-5 pt-24">
             <h1 className="text-center text-4xl font-semibold tracking-tight mb-5">
                 Nuestra empresa
             </h1>
 
             <img className="h-[500px] w-full object-cover" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZWRpZmljaW8lMjBkZSUyMGxhJTIwZW1wcmVzYXxlbnwwfHwwfHx8MA%3D%3D" alt="Imagen de fondo" />
 
-            <div className="flex flex-col gap-4 tracking-tighter leading-7 text-sm font-medium text-slate-800">
+            <div className="flex flex-col gap-4 tracking-tighter leading-7 text-sm font-medium text-slate-800 pb-10">
                 <p className="">
                     CelularesBaratos es una tienda en línea que se dedica a la
                     Venta de celulares, fundada en 2021. Nuestro objetivo es
@@ -30,8 +30,8 @@ export const AboutPage = () => {
 
                 <p>
                     Para más información, no dudes en ponerte en contacto con nosotros, a través de nuestro correo electrónico
-                    <a className="ml-1" href="mailto:correo@celularesbaratos.com">correo@celularesbaratos.com</a> o llamando al
-                    <a className="ml-1" href="tel: 333 3333 3333">tel: 333 3333 3333</a>
+                    <a className="ml-1 text-slate-500" href="mailto:correo@celularesbaratos.com">correo@celularesbaratos.com</a> o llamando al
+                    <a className="ml-1 " href="tel: 333 3333 3333">tel: 333 3333 3333</a>
                 </p>
             </div>
         </div>

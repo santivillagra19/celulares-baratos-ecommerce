@@ -21,7 +21,7 @@ export const RootLayout = () => {
                 )
             }
 
-            <main className="container my-8 flex-1 mx-auto px-4">
+            <main className="container mt-4 flex-1 mx-auto px-4">
                 <Outlet />
 
             </main>

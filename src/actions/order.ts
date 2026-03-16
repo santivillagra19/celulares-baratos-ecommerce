@@ -122,8 +122,6 @@ export const createOrder = async (order: OrderInput) => {
 
 
 export const getOrdersByCustomerId = async () => {
-    // No necesitamos buscar el UserID ni el CustomerID acá.
-    // Supabase ya sabe quién sos por el JWT que viaja en el cliente.
     const { data: orders, error } = await supabase
         .from('orders')
         .select('id, total_amount, created_at, status')
@@ -131,8 +129,6 @@ export const getOrdersByCustomerId = async () => {
 
     if (error) throw new Error(error.message);
 
-    // Si la RLS está activa, 'orders' solo contendrá las filas 
-    // donde auth.uid() coincida con el user_id del cliente.
     return orders;
 };
 
