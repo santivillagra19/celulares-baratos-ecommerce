@@ -3,6 +3,8 @@ import { RootLayout } from "../layouts/RootLayout";
 import { HomePage, AboutPage, CellPhonesPage, CellPhonePage, LoginPage, RegisterPage, OrdersUserPage, CheckOutPage, ThankYouPage } from "../pages";
 import { ClientLayout } from "../layouts/ClientLayout";
 import { OrderUserPage } from "../pages/OrderUserPage";
+import { DashboardLayout } from "../layouts/DashboardLayout";
+import { DashboardProductsPage } from "../pages/dashboard/DashboardProductsPage";
 
 export const router = createBrowserRouter([
     {
@@ -61,6 +63,19 @@ export const router = createBrowserRouter([
         path: '/checkout/:id/thank-you',
         element: <ThankYouPage />
     },
+    {
+        path: '/dashboard',
+        element: <DashboardLayout />,
+        children: [
+            {
+                index: true,
+                element: <Navigate to='/dashboard/productos' />,
+            },
+            {
+                path: 'productos',
+                element: <DashboardProductsPage />
+            },
+        ],
+    },
 
-]
-);
+]);

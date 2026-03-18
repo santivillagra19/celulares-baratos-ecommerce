@@ -17,7 +17,6 @@ export const ProductDescription = ({ content }: Props) => {
         }
     });
 
-
     return <div>
         <h2 className="text-2xl font-bold text-center mb-8 underline mt-10 text-slate-800 px-4 py-2">
             Descripción
