@@ -44,12 +44,11 @@ export const Sheet = () => {
                 ${isSheetOpen ? 'pointer-events-auto' : 'pointer-events-none'}
             `}
         >
-
             <div
                 onClick={closeSheet}
                 className={`
-                    absolute inset-0 bg-black/40 backdrop-blur-sm
-                    transition-opacity duration-500 ease-in-out
+                    absolute inset-0 bg-black/50 backdrop-blur-sm
+                    transition-opacity duration-300 ease-out
                     ${isSheetOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
                 `}
             />
@@ -57,8 +56,8 @@ export const Sheet = () => {
             <div
                 ref={sheetRef}
                 className={`
-                    relative bg-white text-black h-screen w-full md:w-[400px] shadow-2xl pointer-events-auto
-                    transform transition-transform duration-500 cubic-bezier(0.32, 0.72, 0, 1)
+                    relative bg-white text-black h-screen w-full md:w-[450px] md:rounded-l-3xl shadow-2xl pointer-events-auto
+                    transform transition-transform duration-300 ease-out flex flex-col
                     ${isSheetOpen ? 'translate-x-0' : 'translate-x-full'}
                 `}
             >

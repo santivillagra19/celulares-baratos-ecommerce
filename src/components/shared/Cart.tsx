@@ -16,25 +16,29 @@ export const Cart = () => {
     const totalPrice = useCartStore(state => state.getTotalPrice());
 
     return <div className="flex flex-col h-full">
-        <div className="flex px-5 py-7 justify-between items-center border-b border-slate-200">
-            <span className="flex gap-3 items-center font-semibold">
-                <HiOutlineShoppingBag size={20} />
-                {totalItems} artículos
+        <div className="flex px-6 py-6 justify-between items-center border-b border-gray-100 bg-white/50 backdrop-blur-md sticky top-0 z-10">
+            <span className="flex gap-3 items-center font-bold text-xl text-gray-800">
+                <HiOutlineShoppingBag size={24} className="text-blue-600" />
+                Tu Carrito <span className="text-sm font-medium text-gray-500 ml-1">({totalItems})</span>
             </span>
 
-            <button className="cursor-pointer" onClick={closeSheet}>
-                <IoMdClose size={25} className="text-black" />
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors" onClick={closeSheet}>
+                <IoMdClose size={24} className="text-gray-600" />
             </button>
         </div>
 
         {/* Lista de productos añadidos al carrito */}
-        <div className="p-4 overflow-auto flex-1">
+        <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
             {cart.length === 0 ? (
-                <div className="text-center py-10 text-gray-500">
-                    <p>Tu carrito está vacío</p>
+                <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-4">
+                    <HiOutlineShoppingBag size={64} className="opacity-20" />
+                    <p className="text-lg font-medium text-gray-500">Tu carrito está vacío</p>
+                    <button onClick={closeSheet} className="mt-2 text-blue-600 font-semibold hover:underline">
+                        Seguir comprando
+                    </button>
                 </div>
             ) : (
-                <ul>
+                <ul className="flex flex-col gap-4">
                     {cart.map((item) => (
                         <CartItem
                             key={item.variantId}
@@ -45,27 +49,29 @@ export const Cart = () => {
             )}
         </div>
 
-        <div className="mt-4 py-2">
-            <div className="flex justify-between items-center mb-4 font-bold text-lg">
-                <span>Total:</span>
-                <span>{formatPrice(totalPrice)}</span>
+        <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex justify-between items-center mb-6">
+                <span className="text-gray-500 font-medium text-lg">Total estimado:</span>
+                <span className="font-bold text-2xl text-gray-900">{formatPrice(totalPrice)}</span>
             </div>
 
             <Link
                 onClick={closeSheet}
                 to='/checkout'
-                className="w-full bg-black text-white py-3.5 rounded-full flex items-center justify-center gap-3"
+                className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl flex items-center justify-center gap-3 font-semibold text-lg transition-all shadow-lg shadow-blue-600/30 hover:scale-[1.02] ${cart.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
             >
                 <RiSecurePaymentLine size={24} />
-                Continuar con la compra
+                Continuar compra
             </Link>
 
-            <button
-                onClick={cleanCart}
-                className="mt-3 w-full text-black border border-black rounded-full py-3 cursor-pointer"
-            >
-                Limpiar carrito
-            </button>
+            {cart.length > 0 && (
+                <button
+                    onClick={cleanCart}
+                    className="mt-4 w-full text-red-500 hover:bg-red-50 hover:text-red-600 border border-transparent hover:border-red-100 font-medium rounded-xl py-3 transition-colors"
+                >
+                    Vaciar carrito
+                </button>
+            )}
         </div>
     </div>
 };

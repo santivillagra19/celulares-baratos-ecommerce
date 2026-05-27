@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
 import { useProducts } from "../../../hooks/products/useProducts";
 import { useDeleteProduct } from "../../../hooks/products/useDeleteProduct";
 import { ProductGridSkeleton } from "../../skeletons/ProductGridSkeleton";
-import { formatPrice } from "../../../helpers";
 import { useState } from "react";
 import { LuLoader } from "react-icons/lu";
+import { Pagination } from "../../shared/Pagination";
+import { CellTableContent } from "./CellTableContent";
 
 const tableHeaders = [
     '',
@@ -59,59 +59,12 @@ export const TableProduct = () => {
                     <tbody className="divide-y divide-gray-100"> 
                         {
                             products?.map((product) => (
-                                <tr key={product.id} className="hover:bg-gray-50 transition-colors">
-                                    <td className="p-4 align-middle">
-                                        <img 
-                                            src={product.images[0]} 
-                                            alt={product.name} 
-                                            className="w-16 h-16 aspect-square rounded-md object-contain border border-gray-100"
-                                        />
-                                    </td>
-                                    <td className="p-4 font-medium text-slate-700">
-                                        {product.name}
-                                    </td>
-
-                                    <td className="p-4 font-semibold">
-                                        <select className="border border-gray-300 rounded p-1">
-                                        {
-                                            product.variants.map((variant, variantIndex) => (
-                                                <option 
-                                                    key={variant.id}
-                                                    value={variantIndex}
-                                                >
-                                                    {variant.color_name} - {variant.storage}
-                                                </option>
-                                            ))
-                                        }
-                                        </select>
-                                    </td>
-                                    <td className="p-4 text-gray-600">
-                                        {formatPrice(product.variants[0]?.price)}
-                                    </td>
-                                    <td className="p-4 text-gray-600">
-                                        {product.variants[0]?.stock} 
-                                    </td>
-                                    <td className="p-4 text-gray-500">
-                                        {new Date(product.created_at).toLocaleDateString()}
-                                    </td>
-                                    <td className="p-4 text-right">
-                                        <div className="flex gap-3 justify-end">
-                                            <Link 
-                                                to={`/dashboard/products/${product.id}/edit`} 
-                                                className="text-blue-600 hover:text-blue-800 font-medium"
-                                            >
-                                                Editar
-                                            </Link>
-                                            <button 
-                                                onClick={() => handleDelete(product.id, product.name)}
-                                                disabled={isDeleting}
-                                                className={`text-red-600 hover:text-red-800 font-medium ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                            >
-                                                {isDeleting ? 'Eliminando...' : 'Eliminar'}
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <CellTableContent 
+                                    key={product.id} 
+                                    product={product} 
+                                    handleDelete={handleDelete}
+                                    isDeleting={isDeleting}
+                                />
                             ))
                         }
                     </tbody>
@@ -121,6 +74,12 @@ export const TableProduct = () => {
                     <p className="p-10 text-center text-gray-500">No hay productos registrados.</p>
                 )}
             </div>
+
+            <Pagination 
+                page={page}
+                setPage={setPage}
+                totalItems={totalProducts}
+            />
         </div>
     );
 };

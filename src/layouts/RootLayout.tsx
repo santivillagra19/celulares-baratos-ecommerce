@@ -6,6 +6,7 @@ import { Newsletter } from "../components/home/Newsletter";
 import { Sheet } from "../components/shared/Sheet";
 import { useGlobalStore } from "../store/global.store";
 import { NavbarMobile } from "../components/shared/NavbarMobile";
+import { ScrollToTop } from "../components/shared/ScrollToTop";
 
 export const RootLayout = () => {
     const { pathname } = useLocation();
@@ -21,9 +22,8 @@ export const RootLayout = () => {
                 )
             }
 
-            <main className="container mt-4 flex-1 mx-auto px-4">
+            <main className="container mt-4 mb-16 flex-1 mx-auto px-4">
                 <Outlet />
-
             </main>
 
             {
@@ -38,6 +38,7 @@ export const RootLayout = () => {
             {
                 activeNavMobile && <NavbarMobile />
             }
+            <ScrollToTop />
             <Footer />
         </div>
     )
