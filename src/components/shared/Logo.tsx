@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom"
 
-export const Logo = () => {
+interface LogoProps {
+    isDashboard?: boolean;
+}
+
+export const Logo = ({ isDashboard }: LogoProps) => {
     return (
-        <Link to='' className={`text-2xl font-bold tracking-tighter transition-all`}>
+        <Link to='/' className={`text-2xl font-bold tracking-tighter transition-all 
+        ${isDashboard ? 'text-white hover:scale-105' : 'text-gray-800 hover:text-gray-600'}`}>
             <p className="hidden lg:block">
                 Celulares
                 <span className="text-cyan-600">Baratos</span>

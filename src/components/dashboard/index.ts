@@ -5,3 +5,4 @@ export * from './Sidebar'
 
 
 // PRODUCTOS
+export * from './products/TableProduct'
