@@ -44,3 +44,24 @@ export interface PreparedProducts {
     variants: VariantProduct[]
 }
 
+export interface ProductInput {
+    name: string,
+    brand: string,
+    slug: string,
+    features: string[],
+    description: Json,
+    images: File[],
+    variants: {
+        color_name: string,
+        storage: string,
+        price: number,
+        stock: number
+    }[]
+}
+export interface VariantInput {
+    color_name: string,
+    storage: string,
+    price: number,
+    stock: number
+}
+

@@ -27,10 +27,13 @@ export const TableProduct = () => {
         }
     };
 
-    if (isLoading) return <ProductGridSkeleton />;
-
-    if (!products) {
-        return <LuLoader className="animate-spin text-gray-500 mx-auto mt-10" size={32} />
+    if (isLoading || !products) {
+        return (
+            <div className="flex flex-col flex-1 border border-gray-200 rounded-lg p-5 bg-white items-center justify-center min-h-[400px]">
+                <LuLoader className="animate-spin text-blue-500 mb-4" size={48} />
+                <p className="text-gray-500 font-medium animate-pulse">Cargando catálogo de productos...</p>
+            </div>
+        );
     }
 
     return (

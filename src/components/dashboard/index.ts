@@ -6,3 +6,6 @@ export * from './Sidebar'
 
 // PRODUCTOS
 export * from './products/TableProduct'
+export * from './products/FormProduct'
+export * from './products/CellTableContent'
+
