@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { navbarLinks } from "../../constants/links";
 import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineUser } from "react-icons/hi";
 import { FaBarsStaggered } from "react-icons/fa6";
@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../hooks";
 import { LuLoader } from "react-icons/lu";
 import { supabase } from "../../supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
@@ -18,6 +20,8 @@ export const Navbar = () => {
 
     const [isScrolled, setIsScrolled] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const user = session?.session?.user;
     const userInitial = (user?.user_metadata?.full_name || user?.email || 'U')[0].toUpperCase();
@@ -30,7 +34,11 @@ export const Navbar = () => {
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         setShowUserMenu(false);
+        toast.success("Sesión cerrada correctamente");
+        navigate('/');
+        window.scrollTo(0, 0);
     };
 
     return (

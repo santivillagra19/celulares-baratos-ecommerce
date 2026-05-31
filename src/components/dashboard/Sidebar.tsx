@@ -3,11 +3,18 @@ import { dashboardLinks } from "../../constants/links";
 import { Logo } from "../shared/Logo";
 import { IoLogOutOutline } from "react-icons/io5";
 import { signOut } from "../../actions";
+import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export const Sidebar = ( ) => {
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
     const handleLogOut = async() => {
         await signOut();
+        queryClient.invalidateQueries({ queryKey: ['user'] });
+        navigate('/');
+        window.scrollTo(0, 0);
     }
 
     return <div className="w-[120px] bg-stone-800 text-white flex flex-col gap-10 
