@@ -94,19 +94,6 @@ export const getProductBySlug = async (slug: string) => {
     return data;
 }
 
-export const deleteProduct = async (id: string) => {
-    const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', id);
-
-    if (error) {
-        throw new Error(error.message);
-    }
-
-    return true;
-};
-
 export const searchProducts = async (searchTerm: string): Promise<Product[]> => {
     const { data, error } = await supabase
         .from('products')
@@ -184,4 +171,41 @@ export const createProduct = async(productInput: ProductInput) => {
     } catch (error) {
         throw new Error((error as Error).message);
     }
+}
+
+export const deleteProduct = async (id: string) => {
+    const {error: variantsError} = await supabase.from('variants').delete().eq('product_id', id);
+    
+    if(variantsError) {
+        throw new Error(variantsError.message);
+    }
+
+    const {data: productImages, error: productImageError } = await supabase.from('products').select('images').eq('id', id).single();
+    
+    if(productImageError) {
+        throw new Error(productImageError.message);
+    }
+
+    const {error: productDeleteError} = await supabase.from('products').delete().eq('id', id);
+
+    if(productDeleteError) {
+        throw new Error(productDeleteError.message);
+    }
+
+    if(productImages.images && productImages.images.length > 0) {
+        const folderName = id;
+
+        const paths = productImages.images.map((image: string) => {   
+            const fileName = image.split('/').pop();
+            return `${folderName}/${fileName}`; 
+        });
+
+        const { error: storageError } = await supabase.storage.from('product-images').remove(paths);
+        
+        if (storageError) {
+            throw new Error(storageError.message);
+        }
+    }
+
+    return true;
 }
