@@ -86,7 +86,7 @@ export const OrderUserPage = () => {
                         </h2>
 
                         <div className="divide-y divide-gray-100">
-                            {order.orderItems.map((item, index) => (
+                            {order.orderItems?.map((item, index) => (
                                 <div key={index} className="py-5 flex gap-4 items-center first:pt-0 last:pb-0">
                                     <div className="w-20 h-20 bg-gray-50 rounded-xl overflow-hidden border border-gray-100 shrink-0">
                                         <img

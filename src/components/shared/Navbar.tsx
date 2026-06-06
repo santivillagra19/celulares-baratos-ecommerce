@@ -11,6 +11,7 @@ import { LuLoader } from "react-icons/lu";
 import { supabase } from "../../supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useUserRole } from "../../hooks/auth/useUserRole";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
@@ -24,6 +25,7 @@ export const Navbar = () => {
     const navigate = useNavigate();
 
     const user = session?.session?.user;
+    const { role } = useUserRole(user?.id);
     const userInitial = (user?.user_metadata?.full_name || user?.email || 'U')[0].toUpperCase();
 
     useEffect(() => {
@@ -86,6 +88,15 @@ export const Navbar = () => {
 
                     {showUserMenu && (
                         <div className="absolute right-0 mt-3 w-52 bg-white/90 backdrop-blur-lg border border-gray-100 shadow-2xl rounded-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+                            {role === 'admin' && (
+                                <Link
+                                    to="/dashboard"
+                                    onClick={() => setShowUserMenu(false)}
+                                    className="block px-4 py-2.5 text-sm text-cyan-700 hover:bg-cyan-50 rounded-xl font-bold transition-colors mb-1"
+                                >
+                                    Panel de Admin
+                                </Link>
+                            )}
                             <Link
                                 to="/account/pedidos"
                                 onClick={() => setShowUserMenu(false)}

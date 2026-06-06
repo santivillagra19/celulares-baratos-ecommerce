@@ -8,6 +8,7 @@ import { DashboardProductsPage } from "../pages/dashboard/DashboardProductsPage"
 import { DashboardNewProductPage } from "../pages/dashboard/DashboardNewProductPage";
 
 import { DashboardOrdersPage } from "../pages/dashboard/DashboardOrdersPage";
+import { DashboardOrderDetailPage } from "../pages/dashboard/DashboardOrderDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
             {
                 path: 'pedidos',
                 element: <DashboardOrdersPage />
+            },
+            {
+                path: 'pedidos/:id',
+                element: <DashboardOrderDetailPage />
             },
         ],
     },

@@ -52,22 +52,27 @@ export const TableOrders = () => {
                                     {formatPrice(order.total_amount)}
                                 </td>
                                 <td className="p-4">
-                                    <select 
-                                        className={`text-sm font-medium rounded-lg border focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition-colors cursor-pointer outline-none shadow-sm ${
-                                            order.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100' :
-                                            order.status === 'Paid' ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' :
-                                            order.status === 'Shipped' ? 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100' :
-                                            'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                                        }`}
-                                        value={order.status}
-                                        onChange={(e) => updateStatus({ orderId: order.id, status: e.target.value })}
-                                        disabled={isUpdating}
-                                    >
-                                        <option value="Pending" className="bg-white text-gray-800">Pendiente</option>
-                                        <option value="Paid" className="bg-white text-gray-800">Pagado</option>
-                                        <option value="Shipped" className="bg-white text-gray-800">Enviado</option>
-                                        <option value="Delivered" className="bg-white text-gray-800">Entregado</option>
-                                    </select>
+                                    <div className="flex gap-3 justify-end items-center">
+                                        <select 
+                                            className={`text-sm font-medium rounded-lg border focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 transition-colors cursor-pointer outline-none shadow-sm ${
+                                                order.status === 'Pending' ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100' :
+                                                order.status === 'Paid' ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100' :
+                                                order.status === 'Shipped' ? 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100' :
+                                                'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                                            }`}
+                                            value={order.status}
+                                            onChange={(e) => updateStatus({ orderId: order.id, status: e.target.value })}
+                                            disabled={isUpdating}
+                                        >
+                                            <option value="Pending" className="bg-white text-gray-800">Pendiente</option>
+                                            <option value="Paid" className="bg-white text-gray-800">Pagado</option>
+                                            <option value="Shipped" className="bg-white text-gray-800">Enviado</option>
+                                            <option value="Delivered" className="bg-white text-gray-800">Entregado</option>
+                                        </select>
+                                        <a href={`/dashboard/pedidos/${order.id}`} className="text-cyan-600 hover:text-cyan-800 font-medium text-sm whitespace-nowrap">
+                                            Ver detalles
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

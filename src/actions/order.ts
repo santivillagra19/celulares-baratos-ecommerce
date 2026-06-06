@@ -157,14 +157,14 @@ export const getOrderById = async (orderId: number) => {
             codPostal: order?.addresses?.postal_code,
             pais: order?.addresses?.country,
         },
-        orderItems: order?.order_items.map((item: OrderItemFromDB) => ({
+        orderItems: order?.order_items?.map((item: OrderItemFromDB) => ({
             quantity: item.quantity,
             price: item.price,
             color_name: item.variants?.color_name,
             storage: item.variants?.storage,
             product_name: item.variants?.products?.name,
             product_image: item.variants?.products?.images ? item.variants.products.images[0] : null,
-        }))
+        })) || []
     };
 };
 
