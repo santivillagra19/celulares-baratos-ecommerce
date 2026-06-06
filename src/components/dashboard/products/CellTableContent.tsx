@@ -15,13 +15,15 @@ export const CellTableContent = ({
     isDeleting 
 }: CellTableContentProps) => {
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
-    const activeVariant = product.variants[selectedVariantIndex] || product.variants[0];
+    const variants = product.variants || [];
+    const images = product.images || [];
+    const activeVariant = variants[selectedVariantIndex] || variants[0];
 
     return (
         <tr className="hover:bg-gray-50 transition-colors">
             <td className="p-4 align-middle">
                 <img 
-                    src={product.images[0] || 'https://ui.shadcn.com/placeholder.svg'} 
+                    src={images[0] || 'https://ui.shadcn.com/placeholder.svg'} 
                     alt={product.name} 
                     loading="lazy"
                     decoding="async"
@@ -39,7 +41,7 @@ export const CellTableContent = ({
                     onChange={(e) => setSelectedVariantIndex(Number(e.target.value))}
                 >
                 {
-                    product.variants.map((variant, index) => (
+                    variants.map((variant, index) => (
                         <option 
                             key={variant.id}
                             value={index}
@@ -52,10 +54,10 @@ export const CellTableContent = ({
                 </select>
             </td>
             <td className="p-4 text-gray-600">
-                {formatPrice(activeVariant?.price)}
+                {formatPrice(activeVariant?.price || 0)}
             </td>
             <td className="p-4 text-gray-600">
-                {activeVariant?.stock} 
+                {activeVariant?.stock || 0} 
             </td>
             <td className="p-4 text-gray-500">
                 {new Date(product.created_at).toLocaleDateString()}
@@ -63,7 +65,7 @@ export const CellTableContent = ({
             <td className="p-4 text-right">
                 <div className="flex gap-3 justify-end">
                     <Link 
-                        to={`/dashboard/products/${product.id}/edit`} 
+                        to={`/dashboard/productos/editar/${product.slug}`} 
                         className="text-blue-600 hover:text-blue-800 font-medium"
                     >
                         Editar

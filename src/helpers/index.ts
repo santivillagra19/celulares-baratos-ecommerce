@@ -43,3 +43,13 @@ export const prepareProducts = (products: Product[]) => {
         };
     });
 };
+
+export const extractFilePath = (url: string) => {
+    const parts = url.split('/storage/v1/object/public/product-images/');
+
+    if(parts.length !== 2) {
+        throw new Error('URL de imagen no válida');
+    }
+
+    return parts[1];
+}

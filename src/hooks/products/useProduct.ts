@@ -11,6 +11,7 @@ export const useProduct = (slug: string) => {
         queryKey: ['product', slug],
         queryFn: () => getProductBySlug(slug),
         retry: false,
+        enabled: !!slug,
     })
 
     return {

@@ -1,5 +1,6 @@
 import type { Product, ProductInput } from "../interfaces";
 import { supabase } from "../supabase/client"
+import {extractFilePath} from "../helpers/index";
 
 export const getProducts = async (page: number = 1) => {
     const itemsPerPage = 10;
@@ -209,3 +210,118 @@ export const deleteProduct = async (id: string) => {
 
     return true;
 }
+
+export const updateProduct = async (
+    productId: string,
+    productInput: ProductInput
+) => {
+    try {
+        const { data: currentProduct, error: currentError } = await supabase
+            .from('products')
+            .select('images')
+            .eq('id', productId)
+            .single();
+
+        if (currentError) throw new Error(currentError.message);
+
+        const existingImages = currentProduct.images || [];
+
+        const { data: updatedProduct, error: updatedError } = await supabase
+            .from('products')
+            .update({
+                name: productInput.name,
+                brand: productInput.brand,
+                slug: productInput.slug,
+                features: productInput.features,
+                description: productInput.description,
+            })
+            .eq('id', productId)
+            .select()
+            .single();
+
+        if (updatedError) throw new Error(updatedError.message);
+
+        const folderName = productId;
+        const validImages = productInput.images.filter(image => image);
+
+        const imagesToDelete = existingImages.filter(
+            (image: string) => !validImages.includes(image)
+        );
+
+        const filesToDelete = imagesToDelete.map(extractFilePath);
+
+        if (filesToDelete.length > 0) {
+            const { error: deleteImageError } = await supabase.storage
+                .from('product-images')
+                .remove(filesToDelete);
+            
+            if (deleteImageError) throw new Error(deleteImageError.message);
+        }
+
+        const uploadedImages = await Promise.all(
+            validImages.map(async (image) => {
+                if (image instanceof File) {
+                    const { data, error } = await supabase.storage
+                        .from('product-images')
+                        .upload(`${folderName}/${productId}-${image.name}`, image);
+
+                    if (error) throw new Error(error.message);
+
+                    const imageUrl = supabase.storage.from('product-images').getPublicUrl(data.path).data.publicUrl;
+
+                    return imageUrl;
+                } else if (typeof image === 'string') {
+                    return image;
+                } else {
+                    throw new Error('Tipo de imagen no válido');
+                }
+            })
+        );
+
+        const { error: updateImagesError } = await supabase
+            .from('products')
+            .update({ images: uploadedImages })
+            .eq('id', productId);
+
+        if (updateImagesError) throw new Error(updateImagesError.message);
+
+        const existingVariants = productInput.variants.filter(variant => variant.id);
+        const newVariants = productInput.variants.filter(variant => !variant.id);
+        
+        if (existingVariants.length > 0) {
+            const { error: updateVariantsError } = await supabase
+                .from('variants')
+                .upsert(existingVariants.map(variant => ({
+                    id: variant.id as string,
+                    product_id: productId,
+                    stock: variant.stock,
+                    price: variant.price,
+                    color_name: variant.color_name,
+                    storage: variant.storage,
+                    color: '#000000', // Valor por defecto requerido
+                })));
+         
+            if (updateVariantsError) throw new Error(updateVariantsError.message);
+        }
+
+        if (newVariants.length > 0) {
+            const { error: insertVariantsError } = await supabase
+                .from('variants')
+                .insert(newVariants.map(variant => ({
+                    product_id: productId,
+                    stock: variant.stock,
+                    price: variant.price,
+                    color_name: variant.color_name,
+                    storage: variant.storage,
+                    color: '#000000', // Valor por defecto
+                })));
+
+            if (insertVariantsError) throw new Error(insertVariantsError.message);
+        }
+
+        return updatedProduct;
+        
+    } catch (error) {
+        throw new Error((error as Error).message);
+    }
+};

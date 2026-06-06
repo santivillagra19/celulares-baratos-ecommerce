@@ -167,3 +167,36 @@ export const getOrderById = async (orderId: number) => {
         }))
     };
 };
+
+export const getAllOrders = async (page: number = 1) => {
+    const itemsPerPage = 10;
+    const from = (page - 1) * itemsPerPage;
+    const to = from + itemsPerPage - 1;
+
+    const { data: orders, error, count } = await supabase
+        .from('orders')
+        .select('id, total_amount, created_at, status, customers(full_name, email)', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return { orders, count };
+};
+
+export const updateOrderStatus = async (orderId: number, status: string) => {
+    const { data, error } = await supabase
+        .from('orders')
+        .update({ status })
+        .eq('id', orderId)
+        .select()
+        .single();
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    return data;
+};

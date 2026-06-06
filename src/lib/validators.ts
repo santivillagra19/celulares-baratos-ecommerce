@@ -35,6 +35,7 @@ export const addressSchema = z.object({
 });
 
 export const variantSchema = z.object({
+    id: z.string().optional(),
     color_name: z.string().min(1, 'El color es requerido'),
     storage: z.string().min(1, 'El almacenamiento es requerido'),
     price: z.coerce.number().min(0, 'El precio no puede ser negativo'),
@@ -52,7 +53,7 @@ export const productSchema = z.object({
         value => !isContentEmpty(value), 
         { message: 'La descripción detallada es requerida' }
     ),
-    images: z.array(z.custom<File>((val) => val instanceof File, 'Debe ser un archivo válido')).default([]),
+    images: z.array(z.custom<File | string>((val) => val instanceof File || typeof val === 'string', 'Debe ser un archivo válido o URL')).default([]),
     variants: z.array(variantSchema).min(1, 'Debe haber al menos 1 variante').default([]), 
 });
 

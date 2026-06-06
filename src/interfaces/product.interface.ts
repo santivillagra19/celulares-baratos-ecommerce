@@ -50,15 +50,11 @@ export interface ProductInput {
     slug: string,
     features: string[],
     description: Json,
-    images: File[],
-    variants: {
-        color_name: string,
-        storage: string,
-        price: number,
-        stock: number
-    }[]
+    images: (File | string)[],
+    variants: VariantInput[]
 }
 export interface VariantInput {
+    id?: string,
     color_name: string,
     storage: string,
     price: number,

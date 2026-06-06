@@ -7,6 +7,8 @@ import { DashboardLayout } from "../layouts/DashboardLayout";
 import { DashboardProductsPage } from "../pages/dashboard/DashboardProductsPage";
 import { DashboardNewProductPage } from "../pages/dashboard/DashboardNewProductPage";
 
+import { DashboardOrdersPage } from "../pages/dashboard/DashboardOrdersPage";
+
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -79,7 +81,15 @@ export const router = createBrowserRouter([
             {
                 path: 'productos/new/',
                 element: <DashboardNewProductPage />
-            }
+            }, 
+            {
+                path: 'productos/editar/:slug',
+                element: <DashboardNewProductPage />
+            },
+            {
+                path: 'pedidos',
+                element: <DashboardOrdersPage />
+            },
         ],
     },
 
