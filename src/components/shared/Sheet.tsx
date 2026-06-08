@@ -56,12 +56,12 @@ export const Sheet = () => {
             <div
                 ref={sheetRef}
                 className={`
-                    relative bg-white text-black h-screen w-full md:w-[450px] md:rounded-l-3xl shadow-2xl pointer-events-auto
+                    relative bg-white text-black h-screen w-full md:w-[450px] md:rounded-l-xl shadow-2xl pointer-events-auto
                     transform transition-transform duration-300 ease-out flex flex-col
                     ${isSheetOpen ? 'translate-x-0' : 'translate-x-full'}
                 `}
             >
-                <div className="h-full overflow-y-auto p-6">
+                <div className="h-full">
                     {renderContent()}
                 </div>
             </div>

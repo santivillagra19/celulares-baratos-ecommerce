@@ -75,10 +75,15 @@ export const CellPhonePage = () => {
         }
     };
 
+    const cart = useCartStore(state => state.cart);
+
     const handleBuyNow = () => {
         const payload = getProductPayload();
         if (payload) {
-            addToCart(payload);
+            const alreadyInCart = cart.some(item => item.variantId === payload.variantId);
+            if (!alreadyInCart) {
+                addToCart(payload);
+            }
             navigate('/checkout');
         }
     };
@@ -218,7 +223,7 @@ export const CellPhonePage = () => {
                                     className="bg-black text-white uppercase font-semibold tracking-widest text-xs 
                                 rounded-full py-4 cursor-pointer w-full hover:bg-slate-900 transition-all duration-300"
                                 >
-                                    Comprar ahora
+                                    {cart.some(item => item.variantId === selectedVariant?.id) ? 'Ir al checkout' : 'Comprar ahora'}
                                 </button>
                             </div>
                         </>

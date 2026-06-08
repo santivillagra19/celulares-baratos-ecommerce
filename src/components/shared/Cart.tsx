@@ -49,8 +49,8 @@ export const Cart = () => {
             )}
         </div>
 
-        <div className="mt-auto p-6 border-t border-gray-100 bg-gray-50/50">
-            <div className="flex justify-between items-center mb-6">
+        <div className="mt-auto p-5 border-t border-gray-100 bg-gray-50/50">
+            <div className="flex justify-between items-center mb-4">
                 <span className="text-gray-500 font-medium text-lg">Total estimado:</span>
                 <span className="font-bold text-2xl text-gray-900">{formatPrice(totalPrice)}</span>
             </div>
@@ -58,7 +58,7 @@ export const Cart = () => {
             <Link
                 onClick={closeSheet}
                 to='/checkout'
-                className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl flex items-center justify-center gap-3 font-semibold text-lg transition-all shadow-lg shadow-blue-600/30 hover:scale-[1.02] ${cart.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold text-lg transition-all shadow-lg shadow-blue-600/30 hover:scale-[1.02] ${cart.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
             >
                 <RiSecurePaymentLine size={24} />
                 Continuar compra
@@ -67,7 +67,7 @@ export const Cart = () => {
             {cart.length > 0 && (
                 <button
                     onClick={cleanCart}
-                    className="mt-4 w-full text-red-500 hover:bg-red-50 hover:text-red-600 border border-transparent hover:border-red-100 font-medium rounded-xl py-3 transition-colors"
+                    className="mt-3 w-full text-red-500 hover:bg-red-50 hover:text-red-600 border border-transparent hover:border-red-100 font-medium rounded-xl py-2.5 transition-colors"
                 >
                     Vaciar carrito
                 </button>
