@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LuChevronUp } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 
 export const ScrollToTop = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -13,13 +14,19 @@ export const ScrollToTop = () => {
         }
     };
 
-    // Vuelve al principio suavemente
+    // Vuelve al principio suavemente (manual)
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
     };
+
+    // Scroll to top on route change automatically
+    const { pathname } = useLocation();
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, [pathname]);
 
     useEffect(() => {
         window.addEventListener("scroll", toggleVisibility);

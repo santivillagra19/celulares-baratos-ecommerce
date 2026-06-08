@@ -1,11 +1,14 @@
 import { HiOutlineShoppingBag } from "react-icons/hi"
 import { useGlobalStore } from "../../store/global.store";
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { CartItem } from "./CartItem";
 import { useCartStore } from "../../store/cart.store";
 import { formatPrice } from "../../helpers";
+import { useUser } from "../../hooks";
+import { useState } from "react";
+import { AuthCheckoutModal } from "../checkout/AuthCheckoutModal";
 
 export const Cart = () => {
     const closeSheet = useGlobalStore(state => state.closeSheet);
@@ -14,6 +17,20 @@ export const Cart = () => {
     const cleanCart = useCartStore(state => state.cleanCart);
     const totalItems = useCartStore(state => state.getTotalItems());
     const totalPrice = useCartStore(state => state.getTotalPrice());
+
+    const { session } = useUser();
+    const navigate = useNavigate();
+    const [showAuthModal, setShowAuthModal] = useState(false);
+
+    const handleCheckoutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        if (!session?.session) {
+            e.preventDefault();
+            setShowAuthModal(true);
+        } else {
+            closeSheet();
+            navigate('/checkout');
+        }
+    };
 
     return <div className="flex flex-col h-full">
         <div className="flex px-6 py-6 justify-between items-center border-b border-gray-100 bg-white/50 backdrop-blur-md sticky top-0 z-10">
@@ -55,14 +72,14 @@ export const Cart = () => {
                 <span className="font-bold text-2xl text-gray-900">{formatPrice(totalPrice)}</span>
             </div>
 
-            <Link
-                onClick={closeSheet}
-                to='/checkout'
+            <a
+                href="#"
+                onClick={handleCheckoutClick}
                 className={`w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl flex items-center justify-center gap-3 font-semibold text-lg transition-all shadow-lg shadow-blue-600/30 hover:scale-[1.02] ${cart.length === 0 ? 'opacity-50 pointer-events-none' : ''}`}
             >
                 <RiSecurePaymentLine size={24} />
                 Continuar compra
-            </Link>
+            </a>
 
             {cart.length > 0 && (
                 <button
@@ -73,5 +90,10 @@ export const Cart = () => {
                 </button>
             )}
         </div>
+
+        <AuthCheckoutModal 
+            isOpen={showAuthModal} 
+            onClose={() => setShowAuthModal(false)} 
+        />
     </div>
 };

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createProduct } from "../../actions";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export const useCreateProduct = () => {
     const queryClient = useQueryClient();

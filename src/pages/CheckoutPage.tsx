@@ -1,10 +1,25 @@
-import { Link } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import { useCartStore } from "../store/cart.store"
 import { FormCheckout } from "../components/checkout/FormCheckout";
 import { ItemsCheckout } from "../components/checkout/ItemsCheckout";
+import { useUser } from "../hooks";
+import { LuLoader } from "react-icons/lu";
 
 export const CheckOutPage = () => {
     const totalItems = useCartStore(state => state.getTotalItems());
+    const { session, isLoading } = useUser();
+
+    if (isLoading) {
+        return (
+            <div className="h-screen w-full flex items-center justify-center">
+                <LuLoader className="text-4xl animate-spin text-black" />
+            </div>
+        );
+    }
+
+    if (!session?.session) {
+        return <Navigate to="/login" replace />;
+    }
 
     return <div
         style={{

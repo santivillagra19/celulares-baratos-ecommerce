@@ -1,6 +1,6 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { navbarLinks } from "../../constants/links";
-import { HiOutlineSearch, HiOutlineShoppingBag, HiOutlineUser } from "react-icons/hi";
+import { HiOutlineShoppingBag, HiOutlineUser } from "react-icons/hi";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Logo } from "./Logo";
 import { useGlobalStore } from "../../store/global.store";
@@ -35,9 +35,12 @@ export const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    const cleanCart = useCartStore(state => state.cleanCart);
+
     const handleSignOut = async () => {
         await supabase.auth.signOut();
         queryClient.invalidateQueries({ queryKey: ['user'] });
+        cleanCart();
         setShowUserMenu(false);
         toast.success("Sesión cerrada correctamente");
         navigate('/');
