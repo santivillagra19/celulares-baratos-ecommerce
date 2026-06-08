@@ -21,8 +21,9 @@ export const useUpdateProduct = () => {
             toast.success('Producto actualizado correctamente', {position: 'bottom-right'});
             navigate('/dashboard/productos');
         },
-        onError: () => {
-            toast.error('Error al actualizar el producto', {position: 'bottom-right'});
+        onError: (error: any) => {
+            console.error("Detalle del error:", error);
+            toast.error(`Error: ${error.message}`, {position: 'bottom-right'});
         }
     })
 

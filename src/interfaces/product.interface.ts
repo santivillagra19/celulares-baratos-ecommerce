@@ -56,6 +56,7 @@ export interface ProductInput {
 export interface VariantInput {
     id?: string,
     color_name: string,
+    color: string,
     storage: string,
     price: number,
     stock: number

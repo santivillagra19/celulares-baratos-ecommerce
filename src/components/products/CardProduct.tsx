@@ -86,11 +86,11 @@ export const CardProduct = ({
     return (
         <div className="flex flex-col gap-6 relative group/card">
             <Link to={`/celulares/${slug}`} className="flex relative group overflow-hidden">
-                <div className="flex h-[350px] w-full items-center justify-center py-2 lg:h-[250px]">
+                <div className="flex h-[350px] w-full items-center justify-center py-2 lg:h-[250px] bg-white rounded-2xl">
                     <img
                         src={img}
                         alt={name}
-                        className="object-contain h-full w-full transition-transform duration-500 group-hover:scale-105"
+                        className="object-scale-down h-full w-full transition-transform duration-500 group-hover:scale-105"
                     />
                 </div>
 

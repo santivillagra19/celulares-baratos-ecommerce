@@ -36,7 +36,8 @@ export const addressSchema = z.object({
 
 export const variantSchema = z.object({
     id: z.string().optional(),
-    color_name: z.string().min(1, 'El color es requerido'),
+    color_name: z.string().min(1, 'El nombre del color es requerido'),
+    color: z.string().min(1, 'El código de color es requerido'),
     storage: z.string().min(1, 'El almacenamiento es requerido'),
     price: z.coerce.number().min(0, 'El precio no puede ser negativo'),
     stock: z.coerce.number().int('El stock debe ser un entero').min(0, 'El stock no puede ser negativo'),

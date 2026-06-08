@@ -6,6 +6,7 @@ import { OrderUserPage } from "../pages/OrderUserPage";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { DashboardProductsPage } from "../pages/dashboard/DashboardProductsPage";
 import { DashboardNewProductPage } from "../pages/dashboard/DashboardNewProductPage";
+import { DashboardProductSlugPage } from "../pages/dashboard/DashboardProductSlugPage";
 
 import { DashboardOrdersPage } from "../pages/dashboard/DashboardOrdersPage";
 import { DashboardOrderDetailPage } from "../pages/dashboard/DashboardOrderDetailPage";
@@ -89,7 +90,7 @@ export const router = createBrowserRouter([
             }, 
             {
                 path: 'productos/editar/:slug',
-                element: <DashboardNewProductPage />
+                element: <DashboardProductSlugPage />
             },
             {
                 path: 'pedidos',

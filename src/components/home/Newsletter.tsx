@@ -6,25 +6,25 @@ export const Newsletter = () => {
             style={{ backgroundImage: "url(/images/background-newsletter.webp)" }}
         />
 
-        <div className="container z-10 relative p-5 md:p-0">
-            <div className="w-full text-black bg-white p-12 space-y-5 md:w-[50%] lg:w-[10]">
-                <p className="text-xs uppercase font-semibold">
+        <div className="container mx-auto z-10 relative p-5 md:p-0 flex justify-center">
+            <div className="w-full text-black bg-white p-12 rounded-2xl shadow-xl space-y-5 md:w-[70%] lg:w-[50%] text-center flex flex-col items-center">
+                <p className="text-sm uppercase font-bold tracking-wider text-gray-800">
                     Suscríbete a nuestro boletín y recibe promociones
                 </p>
 
-                <p className="text-xs font-medium w-[80%] leading-5">
-                    Introduzca su correo para recibir ofertas
+                <p className="text-sm text-gray-500 font-medium w-[80%] leading-relaxed">
+                    Introduzca su correo para recibir ofertas exclusivas y novedades de nuestros celulares.
                 </p>
-                <form className="flex flex-col gap-5 xl:flex-row">
+                <form className="flex flex-col gap-4 w-full xl:flex-row mt-4">
                     <input
                         type="email"
-                        className="border border-slate-200 focus:outline-none rounded-full py-3 px-5
-                    w-full text-xs font-medium"
+                        className="border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent rounded-full py-3.5 px-6
+                    w-full text-sm font-medium bg-gray-50 transition-all"
                         placeholder="Correo electrónico"
                     />
 
-                    <button className="bg-black text-white font-semibold rounded-full uppercase tracking-wider
-                    py-3 text-xs xl:px-5">
+                    <button className="bg-black hover:bg-gray-800 text-white font-bold rounded-full uppercase tracking-wider
+                    py-3.5 px-8 text-sm transition-colors shadow-lg">
                         Suscribirme
                     </button>
                 </form>

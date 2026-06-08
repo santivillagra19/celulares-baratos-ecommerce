@@ -4,26 +4,44 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema, type ProductFormValues, type ProductFormInput } from "../../../lib/validators";
 import { useCreateProduct } from "../../../hooks/products/useCreateProduct";
+import { useUpdateProduct } from "../../../hooks/products/useUpdateProduct";
 import { TiptapEditor } from "../../shared/TiptapEditor";
 import { FeaturesInput } from "./FeaturesInput";
-import { HiOutlineTrash, HiOutlinePlus, HiOutlineUpload } from "react-icons/hi";
+import { HiOutlineTrash, HiOutlinePlus, HiOutlineUpload, HiOutlineStar } from "react-icons/hi";
 
-export const FormProduct = () => {
+interface Props {
+    productToEdit?: any;
+}
+
+export const FormProduct = ({ productToEdit }: Props) => {
     const navigate = useNavigate();
-    const { mutate: createProduct, isPending } = useCreateProduct();
-    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
+    const { mutate: updateProduct, isPending: isUpdating } = useUpdateProduct();
+    const isEditMode = !!productToEdit;
+    const isPending = isCreating || isUpdating;
+
+    const [imagePreviews, setImagePreviews] = useState<string[]>(productToEdit?.images || []);
     
-    const { register, handleSubmit, control, setValue, getValues, formState: { errors } } = useForm<ProductFormInput, any, ProductFormValues>({
+    const defaultFormValues = {
+        name: '',
+        brand: '',
+        slug: '',
+        description: undefined as unknown as import('@tiptap/react').JSONContent,
+        images: [],
+        features: [],
+        variants: [{ color_name: '', color: '#000000', storage: '', price: 0, stock: 0 }],
+    };
+
+    const formValues = productToEdit ? {
+        ...productToEdit,
+        features: productToEdit.features?.map((f: string) => ({ value: f })) || [],
+        description: productToEdit.description as unknown as import('@tiptap/react').JSONContent,
+    } : defaultFormValues;
+
+    const { register, handleSubmit, control, setValue, getValues, formState: { errors } } = useForm<ProductFormInput, undefined, ProductFormValues>({
         resolver: zodResolver(productSchema),
-        defaultValues: {
-            name: '',
-            brand: '',
-            slug: '',
-            description: undefined as unknown as import('@tiptap/react').JSONContent,
-            images: [],
-            features: [],
-            variants: [{ color_name: '', storage: '', price: 0, stock: 0 }],
-        }
+        defaultValues: defaultFormValues,
+        values: formValues,
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -35,16 +53,21 @@ export const FormProduct = () => {
         const formattedData = {
             ...data,
             features: data.features.map(f => f.value),
-            description: data.description as unknown as import('../../../supabase/supabase').Json, // Parseado a Json
+            description: data.description as unknown as import('../../../supabase/supabase').Json,
         };
-        createProduct(formattedData);
+        
+        if (isEditMode) {
+            updateProduct({ id: productToEdit.id, data: formattedData });
+        } else {
+            createProduct(formattedData);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
             <div>
-                <h2 className="text-2xl font-bold text-gray-800">Crear nuevo producto</h2>
-                <p className="text-gray-500 text-sm mt-1">Completa los detalles generales del equipo a continuación.</p>
+                <h2 className="text-2xl font-bold text-gray-800">{isEditMode ? 'Editar producto' : 'Crear nuevo producto'}</h2>
+                <p className="text-gray-500 text-sm mt-1">{isEditMode ? 'Modifica los detalles del equipo.' : 'Completa los detalles generales del equipo a continuación.'}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -126,9 +149,32 @@ export const FormProduct = () => {
                             {imagePreviews.map((preview, index) => (
                                 <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-gray-200 bg-gray-50 flex items-center justify-center">
                                     <img src={preview} alt={`Preview ${index}`} className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        {index !== 0 && (
+                                            <button
+                                                type="button"
+                                                title="Usar como portada"
+                                                onClick={() => {
+                                                    setImagePreviews(prev => {
+                                                        const newArr = [...prev];
+                                                        const [item] = newArr.splice(index, 1);
+                                                        newArr.unshift(item);
+                                                        return newArr;
+                                                    });
+                                                    const currentImages = getValues('images') || [];
+                                                    const newImagesArr = [...currentImages];
+                                                    const [imgItem] = newImagesArr.splice(index, 1);
+                                                    newImagesArr.unshift(imgItem);
+                                                    setValue('images', newImagesArr, { shouldValidate: true });
+                                                }}
+                                                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-colors shadow-sm transform scale-75 group-hover:scale-100"
+                                            >
+                                                <HiOutlineStar size={18} />
+                                            </button>
+                                        )}
                                         <button 
                                             type="button"
+                                            title="Eliminar imagen"
                                             onClick={() => {
                                                 setImagePreviews(prev => prev.filter((_, i) => i !== index));
                                                 const currentImages = getValues('images') || [];
@@ -139,6 +185,11 @@ export const FormProduct = () => {
                                             <HiOutlineTrash size={18} />
                                         </button>
                                     </div>
+                                    {index === 0 && (
+                                        <div className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-md font-bold shadow-sm">
+                                            Portada
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -155,7 +206,7 @@ export const FormProduct = () => {
                     </div>
                     <button 
                         type="button" 
-                        onClick={() => append({ color_name: '', storage: '', price: 0, stock: 0 })}
+                        onClick={() => append({ color_name: '', color: '#000000', storage: '', price: 0, stock: 0 })}
                         className="flex items-center gap-2 bg-blue-50 text-blue-700 font-semibold px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
                     >
                         <HiOutlinePlus size={20} />
@@ -178,15 +229,28 @@ export const FormProduct = () => {
                                 </button>
                             )}
                             
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            {/* Hidden input to keep variant ID if it exists */}
+                            <input type="hidden" {...register(`variants.${index}.id`)} />
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Color</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Nombre Color</label>
                                     <input 
                                         {...register(`variants.${index}.color_name`)} 
                                         placeholder="Ej. Titanio Natural"
                                         className="p-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"
                                     />
                                     {errors.variants?.[index]?.color_name && <span className="text-red-500 text-xs font-semibold">{errors.variants[index]?.color_name?.message}</span>}
+                                </div>
+
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Tono</label>
+                                    <input 
+                                        type="color"
+                                        {...register(`variants.${index}.color`)} 
+                                        className="w-full h-[42px] p-1 border border-gray-200 rounded-lg cursor-pointer bg-white"
+                                    />
+                                    {errors.variants?.[index]?.color && <span className="text-red-500 text-xs font-semibold">{errors.variants[index]?.color?.message}</span>}
                                 </div>
 
                                 <div className="flex flex-col gap-1">
@@ -203,6 +267,7 @@ export const FormProduct = () => {
                                     <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Precio ($)</label>
                                     <input 
                                         type="number"
+                                        step="0.01"
                                         {...register(`variants.${index}.price`)} 
                                         placeholder="0"
                                         className="p-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white"

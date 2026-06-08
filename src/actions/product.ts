@@ -132,7 +132,7 @@ export const createProduct = async(productInput: ProductInput) => {
         productInput.images.map(async (image) =>{
             if (typeof image === 'string') return image;
             const file = image as File;
-            const {data, error} = await supabase.storage.from('product-images').upload(`${folderName}/${product.id}-${file.name}`, file)
+            const {data, error} = await supabase.storage.from('product-images').upload(`${folderName}/${product.id}-${file.name}`, file, { upsert: true });
 
             if(error) {
                 throw new Error(error.message);
@@ -153,11 +153,10 @@ export const createProduct = async(productInput: ProductInput) => {
         throw new Error(updatedError.message);
     }
 
-    //  Crear las variantes del producto
     const variants = productInput.variants.map(variant => ({
         product_id: product.id, 
         color_name: variant.color_name,
-        color: '#000000', // Valor por defecto ya que la tabla lo requiere
+        color: variant.color,
         storage: variant.storage,
         price: variant.price,
         stock: variant.stock
@@ -250,7 +249,7 @@ export const updateProduct = async (
             (image: string) => !validImages.includes(image)
         );
 
-        const filesToDelete = imagesToDelete.map(extractFilePath);
+        const filesToDelete = imagesToDelete.map(extractFilePath).filter((path): path is string => path !== null);
 
         if (filesToDelete.length > 0) {
             const { error: deleteImageError } = await supabase.storage
@@ -265,7 +264,7 @@ export const updateProduct = async (
                 if (image instanceof File) {
                     const { data, error } = await supabase.storage
                         .from('product-images')
-                        .upload(`${folderName}/${productId}-${image.name}`, image);
+                        .upload(`${folderName}/${productId}-${image.name}`, image, { upsert: true });
 
                     if (error) throw new Error(error.message);
 
@@ -300,7 +299,7 @@ export const updateProduct = async (
                     price: variant.price,
                     color_name: variant.color_name,
                     storage: variant.storage,
-                    color: '#000000', // Valor por defecto requerido
+                    color: variant.color,
                 })));
          
             if (updateVariantsError) throw new Error(updateVariantsError.message);
@@ -315,7 +314,7 @@ export const updateProduct = async (
                     price: variant.price,
                     color_name: variant.color_name,
                     storage: variant.storage,
-                    color: '#000000', // Valor por defecto
+                    color: variant.color,
                 })));
 
             if (insertVariantsError) throw new Error(insertVariantsError.message);

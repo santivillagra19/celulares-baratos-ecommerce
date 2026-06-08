@@ -15,9 +15,9 @@ export const useCreateProduct = () => {
 
             navigate('/dashboard/productos');
         },
-        onError: (error) => {
-            console.error("Error completo:", error);
-            alert(`Error al crear el producto: ${error.message}`);
+        onError: (error: any) => {
+            console.error("Detalle del error:", error);
+            toast.error(`Error: ${error.message}`, {position: 'bottom-right'});
         }
     });
 
