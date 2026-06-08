@@ -10,12 +10,13 @@ export const Banner = () => {
         <div className="absolute inset-0 bg-black opacity-50 " />
 
         <div className="relative z-10 flex flex-col items-center justify-center py-20 px-4 text-center lg: py-40 lg:px-8" >
-            <h1 className="text-4xl font-bold mb-4 lg:text-6xl">
-                Los mejores celulares de 2024
+            <h1 className="text-4xl font-extrabold mb-4 lg:text-6xl tracking-tight">
+                Tecnología premium. <br className="hidden md:block" />
+                <span className="text-blue-400">Precios inteligentes.</span>
             </h1>
 
-            <p className="text-lg mb-8 lg:text-2xl">
-                Descubre las ofertas exclusivas y las últimas novedades en  celulares
+            <p className="text-lg mb-8 lg:text-xl max-w-2xl text-gray-200 font-medium">
+                Descubrí los mejores equipos con garantía, cuotas y envío gratis a todo el país. Tu próximo celular está acá.
             </p>
 
             <Link to='/celulares' className="bg-gray-900 hover:bg-gray-950 text-white font-semibold py-3 px-6 rounded-lg

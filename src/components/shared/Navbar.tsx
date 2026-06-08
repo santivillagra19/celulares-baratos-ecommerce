@@ -12,6 +12,7 @@ import { supabase } from "../../supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useUserRole } from "../../hooks/auth/useUserRole";
+import { NavbarSearch } from "./NavbarSearch";
 
 export const Navbar = () => {
     const openSheet = useGlobalStore(state => state.openSheet);
@@ -64,9 +65,7 @@ export const Navbar = () => {
                 </nav>
 
                 <div className="flex gap-2 items-center">
-                <button onClick={() => openSheet('search')} className="p-2.5 hover:bg-gray-100 rounded-full transition-all hover:scale-105 text-gray-700">
-                    <HiOutlineSearch size={22} />
-                </button>
+                <NavbarSearch />
 
                 <div className="relative">
                     {isLoading ? (
