@@ -33,17 +33,21 @@ export const Footer = () => {
             </div>
 
             <div className="flex flex-col gap-4 flex-1">
-                <p className="font semi-bold uppercase tracking-tighter">
-                    Políticas
+                <p className="font-semibold uppercase tracking-tighter">
+                    Enlaces útiles
                 </p>
 
                 <nav className="flex flex-col gap-2 text-xs font-medium">
-                    <Link to='#'>Productos</Link>
-                    <Link to='/celulares'>Celulares</Link>
-                    <Link to='#' className="text-slate-300 hover:text-white">
-                        Políticas de privacidad
+                    <Link to='/' onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-white transition-colors">
+                        Inicio
                     </Link>
-                    <Link to='#' className="text-slate-300 hover:text-white">
+                    <Link to='/celulares' onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-white transition-colors">
+                        Celulares
+                    </Link>
+                    <Link to='/nosotros' onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-white transition-colors">
+                        Sobre nosotros
+                    </Link>
+                    <Link to='/terminos' onClick={() => window.scrollTo(0, 0)} className="text-slate-300 hover:text-white transition-colors">
                         Términos de uso
                     </Link>
                 </nav>

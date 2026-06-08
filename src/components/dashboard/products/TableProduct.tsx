@@ -1,6 +1,5 @@
 import { useProducts } from "../../../hooks/products/useProducts";
 import { useDeleteProduct } from "../../../hooks/products/useDeleteProduct";
-import { ProductGridSkeleton } from "../../skeletons/ProductGridSkeleton";
 import { useState } from "react";
 import { LuLoader } from "react-icons/lu";
 import { Pagination } from "../../shared/Pagination";

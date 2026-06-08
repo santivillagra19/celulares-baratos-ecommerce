@@ -1,4 +1,5 @@
-import { useEditor, EditorContent, JSONContent } from '@tiptap/react'
+import { useEditor, EditorContent } from '@tiptap/react'
+import type { JSONContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import {
   MdFormatBold,

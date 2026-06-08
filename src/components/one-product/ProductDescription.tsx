@@ -2,7 +2,7 @@ import { EditorContent, useEditor, type JSONContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 interface Props {
-    content: JSONContent | Json;
+    content: JSONContent;
 }
 
 export const ProductDescription = ({ content }: Props) => {

@@ -33,7 +33,7 @@ export const FormCheckout = () => {
                 city: data.city,
                 state: data.state,
                 codPostal: data.codPostal,
-                country: data.country,
+                pais: data.country,
 
             },
             cartItems: cartItems.map(item => ({

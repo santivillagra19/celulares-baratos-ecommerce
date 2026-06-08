@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { JSONContent } from '@tiptap/react';
+import type { JSONContent } from '@tiptap/react';
 
 const isContentEmpty = (content: JSONContent): boolean => {
     if (!content || !content.content) return true;
@@ -48,9 +48,9 @@ export const productSchema = z.object({
     slug: z.string().min(1, 'El slug del producto es requerido').regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'El slug debe contener solo letras minúsculas, números y guiones'),
     features: z.array(z.object({
         value: z.string().min(1, 'La característica es requerida'), 
-    })).optional().default([]),
+    })).default([]),
     description: z.custom<JSONContent>(
-        value => !isContentEmpty(value), 
+        (value) => !isContentEmpty(value as JSONContent), 
         { message: 'La descripción detallada es requerida' }
     ),
     images: z.array(z.custom<File | string>((val) => val instanceof File || typeof val === 'string', 'Debe ser un archivo válido o URL')).default([]),
@@ -60,3 +60,4 @@ export const productSchema = z.object({
 export type UserRegisterFormValues = z.infer<typeof userRegisterSchema>;
 export type AddressFormValues = z.infer<typeof addressSchema>;
 export type ProductFormValues = z.infer<typeof productSchema>;
+export type ProductFormInput = z.input<typeof productSchema>;

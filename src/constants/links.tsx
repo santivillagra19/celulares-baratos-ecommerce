@@ -1,5 +1,4 @@
 import { FaBoxOpen, FaCartShopping, FaFacebook, FaInstagram, FaTiktok, FaXTwitter } from "react-icons/fa6";
-import { href } from "react-router-dom";
 
 export const navbarLinks = [
     {

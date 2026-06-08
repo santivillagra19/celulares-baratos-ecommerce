@@ -1,29 +1,19 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productSchema, type ProductFormValues } from "../../../lib/validators";
+import { productSchema, type ProductFormValues, type ProductFormInput } from "../../../lib/validators";
 import { useCreateProduct } from "../../../hooks/products/useCreateProduct";
-import { useUpdateProduct } from "../../../hooks/products/useUpdateProduct";
-import { useProduct } from "../../../hooks/products/useProduct";
 import { TiptapEditor } from "../../shared/TiptapEditor";
 import { FeaturesInput } from "./FeaturesInput";
 import { HiOutlineTrash, HiOutlinePlus, HiOutlineUpload } from "react-icons/hi";
 
 export const FormProduct = () => {
     const navigate = useNavigate();
-    const { slug } = useParams<{ slug: string }>();
-    const isEditMode = !!slug;
-
-    const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
-    const { mutate: updateProduct, isPending: isUpdating } = useUpdateProduct();
-    const { product, isLoading: isLoadingProduct } = useProduct(slug || '');
-
+    const { mutate: createProduct, isPending } = useCreateProduct();
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     
-    const isPending = isCreating || isUpdating;
-    
-    const { register, handleSubmit, control, setValue, getValues, reset, formState: { errors } } = useForm<ProductFormValues>({
+    const { register, handleSubmit, control, setValue, getValues, formState: { errors } } = useForm<ProductFormInput, any, ProductFormValues>({
         resolver: zodResolver(productSchema),
         defaultValues: {
             name: '',
@@ -36,21 +26,6 @@ export const FormProduct = () => {
         }
     });
 
-    useEffect(() => {
-        if (isEditMode && product) {
-            reset({
-                name: product.name,
-                brand: product.brand,
-                slug: product.slug,
-                description: product.description as any,
-                images: product.images || [],
-                features: (product.features || []).map(f => ({ value: f })),
-                variants: product.variants || [],
-            });
-            setImagePreviews((product.images as string[]) || []);
-        }
-    }, [isEditMode, product, reset]);
-
     const { fields, append, remove } = useFieldArray({
         control,
         name: "variants",
@@ -62,23 +37,14 @@ export const FormProduct = () => {
             features: data.features.map(f => f.value),
             description: data.description as unknown as import('../../../supabase/supabase').Json, // Parseado a Json
         };
-        
-        if (isEditMode && product) {
-            updateProduct({ id: product.id, data: formattedData });
-        } else {
-            createProduct(formattedData);
-        }
+        createProduct(formattedData);
     };
-
-    if (isEditMode && isLoadingProduct) {
-        return <div className="p-8 text-center text-gray-500 font-semibold mt-10">Cargando información del producto...</div>;
-    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8 max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
             <div>
-                <h2 className="text-2xl font-bold text-gray-800">{isEditMode ? 'Editar producto' : 'Crear nuevo producto'}</h2>
-                <p className="text-gray-500 text-sm mt-1">{isEditMode ? 'Modifica los detalles del equipo a continuación.' : 'Completa los detalles generales del equipo a continuación.'}</p>
+                <h2 className="text-2xl font-bold text-gray-800">Crear nuevo producto</h2>
+                <p className="text-gray-500 text-sm mt-1">Completa los detalles generales del equipo a continuación.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

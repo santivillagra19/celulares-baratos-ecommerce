@@ -130,7 +130,9 @@ export const createProduct = async(productInput: ProductInput) => {
     // Subir las imágenes a Supabase Storage y obtener las URLs públicas
     const uploadedImages = await Promise.all(
         productInput.images.map(async (image) =>{
-            const {data, error} = await supabase.storage.from('product-images').upload(`${folderName}/${product.id}-${image.name}`, image)
+            if (typeof image === 'string') return image;
+            const file = image as File;
+            const {data, error} = await supabase.storage.from('product-images').upload(`${folderName}/${product.id}-${file.name}`, file)
 
             if(error) {
                 throw new Error(error.message);

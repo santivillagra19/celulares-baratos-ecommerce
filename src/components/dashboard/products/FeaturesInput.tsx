@@ -1,11 +1,12 @@
-import { Control, useFieldArray, UseFormRegister, FieldErrors } from "react-hook-form";
-import { ProductFormValues } from "../../../lib/validators";
+import { useFieldArray } from "react-hook-form";
+import type { FieldErrors, Control, UseFormRegister } from "react-hook-form";
+import type { ProductFormInput } from "../../../lib/validators";
 import { HiOutlinePlus, HiOutlineTrash } from "react-icons/hi";
 
 interface FeaturesInputProps {
-    control: Control<ProductFormValues>;
-    register: UseFormRegister<ProductFormValues>;
-    errors: FieldErrors<ProductFormValues>;
+    control: Control<ProductFormInput>;
+    register: UseFormRegister<ProductFormInput>;
+    errors: FieldErrors<ProductFormInput>;
 }
 
 export const FeaturesInput = ({ control, register, errors }: FeaturesInputProps) => {

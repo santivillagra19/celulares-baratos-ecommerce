@@ -1,9 +1,9 @@
-import type { Product } from "../../interfaces"
+import type { PreparedProducts } from "../../interfaces"
 import { CardProduct } from "../products/CardProduct"
 
 interface Props {
     title: string,
-    products: Product[]
+    products: PreparedProducts[]
 }
 
 export const ProductGrid = ({ title, products }: Props) => {
@@ -17,6 +17,7 @@ export const ProductGrid = ({ title, products }: Props) => {
                 products.map((product) => (
                     <CardProduct
                         key={product.id}
+                        productId={product.id}
                         name={product.name}
                         price={product.price}
                         colors={product.colors}

@@ -242,6 +242,6 @@ export const CellPhonePage = () => {
             </div>
         </div>
 
-        <ProductDescription content={product.description} />
+        <ProductDescription content={product.description as any} />
     </div>
 };
