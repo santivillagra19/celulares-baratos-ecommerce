@@ -1,7 +1,7 @@
 import { HiOutlineShoppingBag } from "react-icons/hi"
 import { useGlobalStore } from "../../store/global.store";
 import { IoMdClose } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { RiSecurePaymentLine } from "react-icons/ri";
 import { CartItem } from "./CartItem";
 import { useCartStore } from "../../store/cart.store";
